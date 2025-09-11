@@ -1,0 +1,13 @@
+name: Run OpenSSL Thrice
+on:
+  workflow_dispatch:
+jobs:
+  run-command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run openssl rand -hex 32 (1/3)
+        run: openssl rand -hex 32
+      - name: Run openssl rand -hex 32 (2/3)
+        run: openssl rand -hex 32
+      - name: Run openssl rand -hex 32 (3/3)
+        run: openssl rand -hex 32
