@@ -1,9 +1,1 @@
-export async function onRequestPost({ request, env }) {
-  try {
-    const { username, pass_hash } = await request.json();
-    if (!username || !pass_hash) return new Response('Missing fields', { status: 400 });
-    const user = await env.D1_EV.prepare("SELECT pass_hash FROM users WHERE username = ?").bind(username).first();
-    if (user?.pass_hash !== pass_hash) return new Response('Invalid credentials', { status: 401 });
-    return Response.json({ success: true, username });
-  } catch (e) { return new Response(e.message, { status: 500 }); }
-}
+export async function onRequestPost({request:r,env:e}){try{const{'g-recaptcha-response':t,...b}=await r.json(),s=await fetch("https://www.google.com/recaptcha/api/siteverify",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`secret=${e.RECAPCHA_KEY}&response=${t}`}).then(r=>r.json());if(!s.success)return new Response("CAPTCHA verification failed.",{status:403});const{username:a,pass_hash:o}=b;if(!a||!o)return new Response("Missing fields",{status:400});const n=await e.D1_EV.prepare("SELECT pass_hash FROM users WHERE username = ?").bind(a).first();return n?.pass_hash!==o?new Response("Invalid credentials",{status:401}):Response.json({success:!0,username:a})}catch(r){return new Response(r.message,{status:500})}}
