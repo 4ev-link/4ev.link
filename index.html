@@ -81,7 +81,7 @@
     <script>lucide.createIcons();</script>
     <script src="https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js"></script>
     <script>
-      function authForm(){return{username:"",password:"",error:"",loading:!1,async submit(e){this.loading=!0,this.error="";try{const t=new TextEncoder,s=t.encode(this.password),o=t.encode(this.username.padEnd(16,"0").substring(0,16)),a=await scrypt.scrypt(s,o,16384,8,1,32),n=Array.from(a).map(e=>e.toString(16).padStart(2,"0")).join(""),i=await fetch(`/api/${e}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:this.username,pass_hash:n})});if(!i.ok)throw new Error(await i.text()||"An error occurred");const r=await i.json();sessionStorage.setItem("pass_hash",n),sessionStorage.setItem("username",r.username),window.location.href="/dash.html"}catch(t){this.error=t.message}finally{this.loading=!1}}}}
+      function authForm(){return{username:"",password:"",error:"",loading:!1,async submit(e){this.loading=!0,this.error="";try{const t=new TextEncoder,s=t.encode(this.password),o=t.encode(this.username.padEnd(16,"0").substring(0,16)),a=await scrypt.scrypt(s,o,16384,8,1,32),n=Array.from(a).map(e=>e.toString(16).padStart(2,"0")).join(""),i=await fetch(`/api/${e}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:this.username,pass_hash:n})});if(!i.ok)throw new Error(await i.text()||"An error occurred");const r=await i.json();sessionStorage.setItem("pass_hash",n),sessionStorage.setItem("username",r.username),window.location.href="/dash/"}catch(t){this.error=t.message}finally{this.loading=!1}}}}
     </script>
 </body>
 </html>
