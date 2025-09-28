@@ -71,12 +71,47 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="max-w-2xl mx-auto mt-12" x-data="linkList()" x-init="fetchLinks()" @link-created.window="fetchLinks()">
+                    <h2 class="text-2xl font-bold mb-4">Your Links</h2>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-h-[10rem] flex flex-col justify-center">
+                        <template x-if="loading">
+                            <div class="flex justify-center items-center p-8">
+                                <i data-lucide="loader-2" class="animate-spin w-8 h-8 text-slate-400"></i>
+                            </div>
+                        </template>
+                        <template x-if="!loading && error">
+                            <p class="text-rose-500 text-center" x-text="error"></p>
+                        </template>
+                        <template x-if="!loading && !error">
+                            <div>
+                                <template x-if="links.length === 0">
+                                    <p class="text-slate-500 text-center py-4">You haven't created any links yet.</p>
+                                </template>
+                                <template x-if="links.length > 0">
+                                    <ul class="space-y-3">
+                                        <template x-for="slug in links" :key="slug">
+                                            <li x-data="{ copied: false }" class="flex items-center justify-between p-3 bg-slate-50 rounded-md border border-slate-200 hover:bg-slate-100 transition-colors">
+                                                <a :href="`/${slug}`" target="_blank" x-text="`${window.location.host}/${slug}`" class="font-mono text-slate-700 hover:underline"></a>
+                                                <button @click="navigator.clipboard.writeText(`https://${window.location.host}/${slug}`); copied = true; setTimeout(() => copied = false, 2000)" class="text-slate-500 hover:text-slate-900 transition-colors">
+                                                    <i data-lucide="copy" class="w-4 h-4" x-show="!copied"></i>
+                                                    <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display: none;"></i>
+                                                </button>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
     <script>
-        function linkForm(){return{destination_url:"",slug:"",loading:!1,error:"",result:{},copied:!1,async createLink(){this.loading=!0,this.error="",this.result={};const o=grecaptcha.getResponse();if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const e=sessionStorage.getItem("username"),s=sessionStorage.getItem("pass_hash");if(!e||!s)throw new Error("Authentication error. Please log in again.");const t=await fetch("/api/links/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({destination_url:this.destination_url,slug:this.slug||null,username:e,pass_hash:s,"g-recaptcha-response":o})});if(!t.ok)throw new Error(await t.text()||"Failed to create link.");const i=await t.json(),r=window.location.host;this.result={...i,url:`https://${r}/${i.slug}`},this.destination_url="",this.slug="",this.$nextTick(()=>lucide.createIcons())}catch(e){this.error=e.message}finally{this.loading=!1,grecaptcha.reset()}}}}
+        function linkForm(){return{destination_url:"",slug:"",loading:!1,error:"",result:{},copied:!1,async createLink(){this.loading=!0,this.error="",this.result={};const o=grecaptcha.getResponse();if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const e=sessionStorage.getItem("username"),s=sessionStorage.getItem("pass_hash");if(!e||!s)throw new Error("Authentication error. Please log in again.");const t=await fetch("/api/links/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({destination_url:this.destination_url,slug:this.slug||null,username:e,pass_hash:s,"g-recaptcha-response":o})});if(!t.ok)throw new Error(await t.text()||"Failed to create link.");const i=await t.json(),r=window.location.host;this.result={...i,url:`https://${r}/${i.slug}`},this.destination_url="",this.slug="",this.$dispatch("link-created"),this.$nextTick(()=>lucide.createIcons())}catch(e){this.error=e.message}finally{this.loading=!1,grecaptcha.reset()}}}}
+        function linkList(){return{links:[],loading:!0,error:"",async fetchLinks(){this.loading=!0,this.error="";try{const e=sessionStorage.getItem("username"),s=sessionStorage.getItem("pass_hash");if(!e||!s)throw new Error("Authentication error.");const t=await fetch("/api/links/list",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:e,pass_hash:s})});if(!t.ok)throw new Error(await t.text()||"Failed to fetch links.");this.links=(await t.json()).reverse()}catch(e){this.error=e.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}}}}
         lucide.createIcons();
     </script>
 </body>
