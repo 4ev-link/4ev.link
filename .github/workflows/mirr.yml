@@ -1,0 +1,29 @@
+name: Sync with Upstream
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+
+      - name: Sync, preserving directories
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git remote add upstream https://github.com/multipleof4/test.git
+          git fetch upstream master
+          git reset --hard upstream/master
+          git rm -r --ignore-unmatch functions .github/workflows
+          git checkout ORIG_HEAD -- functions .github/workflows
+          
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "chore: Sync from multipleof4/sune" && git push --force
