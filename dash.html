@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - 4ev.link</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans">
+    <script>if (!sessionStorage.getItem('username')) window.location.href = '/';</script>
+
+    <div x-data="{ user: sessionStorage.getItem('username') }" class="min-h-screen flex flex-col">
+        <header class="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <a href="/dash.html" class="text-2xl font-bold flex items-center gap-2">
+                        <i data-lucide="link" class="w-6 h-6 text-indigo-600"></i> 4ev.link
+                    </a>
+                    <div class="flex items-center gap-4">
+                        <span class="text-slate-600">Welcome, <strong x-text="user"></strong></span>
+                        <button @click="sessionStorage.clear(); window.location.href='/'" class="text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow">
+            <div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+                        <h1 class="text-2xl font-bold mb-1">Create a new link</h1>
+                        <p class="text-slate-500 mb-6">Shorten a long URL into a memorable link.</p>
+                        <form class="space-y-4">
+                            <div>
+                                <label for="longUrl" class="block text-sm font-medium text-slate-700 mb-1">Destination URL</label>
+                                <input type="url" id="longUrl" placeholder="https://example.com/very-long-url-to-shorten" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            </div>
+                            <div>
+                                <label for="customSlug" class="block text-sm font-medium text-slate-700 mb-1">Custom slug (optional)</label>
+                                <div class="flex items-center">
+                                    <span class="p-3 bg-slate-100 border border-r-0 border-slate-300 rounded-l-md text-slate-500">4ev.link/</span>
+                                    <input type="text" id="customSlug" placeholder="my-awesome-link" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full py-3 font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">Create Short Link</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>
