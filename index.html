@@ -79,7 +79,7 @@
       }
     </style>
     <script>lucide.createIcons();</script>
-    <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2-browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2-bundled.js"></script>
     <script>
       function authForm(){return{username:"",password:"",error:"",loading:!1,async submit(e){this.loading=!0,this.error="";try{const s=this.username.padEnd(16,"0").substring(0,16),t=await argon2.hash({pass:this.password,salt:s}),a=await fetch(`/api/${e}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:this.username,pass_hash:t.hex})});if(!a.ok)throw new Error(await a.text()||"An error occurred");sessionStorage.setItem("pass_hash",t.hex),sessionStorage.setItem("username",this.username),window.location.href="/dash.html"}catch(s){this.error=s.message}finally{this.loading=!1}}}}
     </script>
