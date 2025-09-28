@@ -8,7 +8,7 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans">
+<body class="bg-slate-50 text-slate-800 font-sans">
     <script>if (!sessionStorage.getItem('username')) window.location.href = '/';</script>
 
     <div x-data="{ user: sessionStorage.getItem('username') }" class="min-h-screen flex flex-col">
@@ -16,11 +16,11 @@
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <a href="/dash/" class="text-2xl font-bold flex items-center gap-2">
-                        <i data-lucide="link" class="w-6 h-6 text-indigo-600"></i> 4ev.link
+                        <i data-lucide="link" class="w-6 h-6 text-slate-800"></i> 4ev.link
                     </a>
                     <div class="flex items-center gap-4">
                         <span class="text-slate-600">Welcome, <strong x-text="user"></strong></span>
-                        <button @click="sessionStorage.clear(); window.location.href='/'" class="text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors">
+                        <button @click="sessionStorage.clear(); window.location.href='/'" class="text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors">
                             Logout
                         </button>
                     </div>
@@ -39,8 +39,8 @@
                             <div class="bg-green-100 border border-green-300 text-green-800 p-3.5 rounded-md mb-6" role="alert">
                                 <p class="font-semibold">Success! Your link is ready:</p>
                                 <div class="flex items-center gap-2 mt-2">
-                                    <a :href="result.url" x-text="result.url" target="_blank" class="font-mono text-indigo-600 hover:underline"></a>
-                                    <button @click="navigator.clipboard.writeText(result.url); copied = true; setTimeout(() => copied = false, 2000)" class="text-slate-500 hover:text-indigo-600">
+                                    <a :href="result.url" x-text="result.url" target="_blank" class="font-mono text-slate-700 hover:underline"></a>
+                                    <button @click="navigator.clipboard.writeText(result.url); copied = true; setTimeout(() => copied = false, 2000)" class="text-slate-500 hover:text-slate-900">
                                         <i data-lucide="copy" class="w-4 h-4" x-show="!copied"></i>
                                         <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display: none;"></i>
                                     </button>
@@ -51,20 +51,21 @@
                         <form @submit.prevent="createLink" class="space-y-4">
                             <div>
                                 <label for="longUrl" class="block text-sm font-medium text-slate-700 mb-1">Destination URL</label>
-                                <input x-model="destination_url" type="text" id="longUrl" placeholder="example.com/very-long-url-to-shorten" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <input x-model="destination_url" type="text" id="longUrl" placeholder="example.com/very-long-url-to-shorten" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400 transition">
                             </div>
                             <div>
                                 <label for="customSlug" class="block text-sm font-medium text-slate-700 mb-1">Custom slug (optional)</label>
                                 <div class="flex items-center">
                                     <span class="p-3 bg-slate-100 border border-r-0 border-slate-300 rounded-l-md text-slate-500">4ev.link/</span>
-                                    <input x-model="slug" type="text" id="customSlug" placeholder="my-awesome-link" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                    <input x-model="slug" type="text" id="customSlug" placeholder="my-custom-link" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400 transition">
                                 </div>
                             </div>
                             <p x-text="error" x-show="error" class="text-rose-500 text-sm h-5"></p>
-                            <button type="submit" :disabled="loading" class="w-full py-3 font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button type="submit" :disabled="loading" class="w-full py-3 font-semibold rounded-lg text-white bg-slate-800 hover:bg-slate-900 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
                                 <span x-show="!loading">Create Short Link</span>
                                 <i x-show="loading" data-lucide="loader-2" class="animate-spin w-6 h-6"></i>
                             </button>
+                            <p class="text-xs text-slate-500 text-center pt-2">Links are permanent and do not expire.</p>
                         </form>
                     </div>
                 </div>
