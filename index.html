@@ -10,6 +10,7 @@
     <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center font-sans overflow-hidden">
+    <script>if (localStorage.getItem('username')) window.location.href = '/dash/';</script>
 
     <div class="absolute top-0 left-0 w-72 h-72 bg-gradient-to-tr from-violet-600 to-rose-600 rounded-full filter blur-3xl opacity-30 animate-blob"></div>
     <div class="absolute bottom-0 right-0 w-72 h-72 bg-gradient-to-br from-blue-600 to-green-600 rounded-full filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
@@ -88,7 +89,7 @@
     <script>lucide.createIcons();</script>
     <script src="https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js"></script>
     <script>
-      function authForm(){return{username:"",password:"",error:"",loading:!1,widgetId:null,renderCaptcha(){if(!window.grecaptcha?.render)return void setTimeout(()=>this.renderCaptcha(),100);this.$nextTick(()=>{const e=this.$el.querySelector(".recaptcha-container");e&&(e.innerHTML="",this.widgetId=grecaptcha.render(e,{sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"}))})},async submit(e){this.loading=!0,this.error="";const c=grecaptcha.getResponse(this.widgetId);if(!c)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const t=new TextEncoder,s=t.encode(this.password),o=t.encode(this.username.padEnd(16,"0").substring(0,16)),a=await scrypt.scrypt(s,o,16384,8,1,32),n=Array.from(a).map(e=>e.toString(16).padStart(2,"0")).join(""),i=await fetch(`/api/${e}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:this.username,pass_hash:n,"g-recaptcha-response":c})});if(!i.ok)throw new Error(await i.text()||"An error occurred");const r=await i.json();sessionStorage.setItem("pass_hash",n),sessionStorage.setItem("username",r.username),window.location.href="/dash/"}catch(t){this.error=t.message}finally{this.loading=!1,grecaptcha.reset(this.widgetId)}}}}
+      function authForm(){return{username:"",password:"",error:"",loading:!1,widgetId:null,renderCaptcha(){if(!window.grecaptcha?.render)return void setTimeout(()=>this.renderCaptcha(),100);this.$nextTick(()=>{const e=this.$el.querySelector(".recaptcha-container");e&&(e.innerHTML="",this.widgetId=grecaptcha.render(e,{sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"}))})},async submit(e){this.loading=!0,this.error="";const c=grecaptcha.getResponse(this.widgetId);if(!c)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const t=new TextEncoder,s=t.encode(this.password),o=t.encode(this.username.padEnd(16,"0").substring(0,16)),a=await scrypt.scrypt(s,o,16384,8,1,32),n=Array.from(a).map(e=>e.toString(16).padStart(2,"0")).join(""),i=await fetch(`/api/${e}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:this.username,pass_hash:n,"g-recaptcha-response":c})});if(!i.ok)throw new Error(await i.text()||"An error occurred");const r=await i.json();localStorage.setItem("pass_hash",n),localStorage.setItem("username",r.username),window.location.href="/dash/"}catch(t){this.error=t.message}finally{this.loading=!1,grecaptcha.reset(this.widgetId)}}}}
     </script>
 </body>
 </html>
