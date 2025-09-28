@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2-browser.min.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center font-sans overflow-hidden">
 
@@ -34,7 +35,7 @@
         </div>
 
         <!-- Auth Forms View -->
-        <div x-show="view !== 'landing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl border border-slate-700" style="display: none;">
+        <div x-data="authForm()" x-show="view !== 'landing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl border border-slate-700" style="display: none;">
             <button @click="view = 'landing'" class="absolute top-4 left-4 text-slate-400 hover:text-white transition-colors">
                 <i data-lucide="arrow-left"></i>
             </button>
@@ -42,20 +43,28 @@
             <!-- Login Form -->
             <div x-show="view === 'login'">
                 <h2 class="text-3xl font-bold mb-6">Login</h2>
-                <form class="space-y-4">
-                    <input type="text" placeholder="Username" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
-                    <input type="password" placeholder="Password" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
-                    <button type="submit" class="w-full py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:opacity-90 transition-opacity">Login</button>
+                <form @submit.prevent="submit('signin')" class="space-y-4">
+                    <input type="text" x-model="username" placeholder="Username" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <input type="password" x-model="password" placeholder="Password" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <p x-text="error" x-show="error" class="text-rose-400 text-sm h-5"></p>
+                    <button type="submit" :disabled="loading" class="w-full py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:opacity-90 transition-opacity flex items-center justify-center disabled:opacity-50">
+                        <span x-show="!loading">Login</span>
+                        <i x-show="loading" data-lucide="loader-2" class="animate-spin w-6 h-6"></i>
+                    </button>
                 </form>
             </div>
 
             <!-- Signup Form -->
             <div x-show="view === 'signup'">
                 <h2 class="text-3xl font-bold mb-6">Create Account</h2>
-                <form class="space-y-4">
-                    <input type="text" placeholder="Username" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <input type="password" placeholder="Password" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <button type="submit" class="w-full py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:opacity-90 transition-opacity">Sign Up</button>
+                <form @submit.prevent="submit('signup')" class="space-y-4">
+                    <input type="text" x-model="username" placeholder="Username" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input type="password" x-model="password" placeholder="Password" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <p x-text="error" x-show="error" class="text-rose-400 text-sm h-5"></p>
+                    <button type="submit" :disabled="loading" class="w-full py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:opacity-90 transition-opacity flex items-center justify-center disabled:opacity-50">
+                        <span x-show="!loading">Sign Up</span>
+                        <i x-show="loading" data-lucide="loader-2" class="animate-spin w-6 h-6"></i>
+                    </button>
                 </form>
             </div>
         </div>
@@ -71,5 +80,8 @@
       }
     </style>
     <script>lucide.createIcons();</script>
+    <script>
+      function authForm(){return{username:"",password:"",error:"",loading:!1,async submit(e){this.loading=!0,this.error="";try{const s=this.username.padEnd(16,"0").substring(0,16),t=await argon2.hash({pass:this.password,salt:s}),a=await fetch(`/api/${e}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:this.username,pass_hash:t.hex})});if(!a.ok)throw new Error(await a.text()||"An error occurred");sessionStorage.setItem("pass_hash",t.hex),sessionStorage.setItem("username",this.username),window.location.href="/dash.html"}catch(s){this.error=s.message}finally{this.loading=!1}}}}
+    </script>
 </body>
 </html>
