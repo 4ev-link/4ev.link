@@ -1,11 +1,1 @@
-export async function onRequestPost({ request, env }) {
-  try {
-    const { username, pass_hash } = await request.json();
-    if (!username || !pass_hash) return new Response('Missing fields', { status: 400 });
-    if (await env.D1_EV.prepare("SELECT 1 FROM users WHERE username = ?").bind(username).first())
-      return new Response('User already exists', { status: 409 });
-    await env.D1_EV.prepare("INSERT INTO users (username, pass_hash) VALUES (?, ?)")
-      .bind(username, pass_hash).run();
-    return Response.json({ success: true, username }, { status: 201 });
-  } catch (e) { return new Response(e.message, { status: 500 }); }
-}
+export async function onRequestPost({request:r,env:e}){try{const{'g-recaptcha-response':t,...b}=await r.json(),s=await fetch("https://www.google.com/recaptcha/api/siteverify",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`secret=${e.RECAPCHA_KEY}&response=${t}`}).then(r=>r.json());if(!s.success)return new Response("CAPTCHA verification failed.",{status:403});const{username:a,pass_hash:o}=b;if(!a||!o)return new Response("Missing fields",{status:400});if(await e.D1_EV.prepare("SELECT 1 FROM users WHERE username = ?").bind(a).first())return new Response("User already exists",{status:409});return await e.D1_EV.prepare("INSERT INTO users (username, pass_hash) VALUES (?, ?)").bind(a,o).run(),Response.json({success:!0,username:a},{status:201})}catch(r){return new Response(r.message,{status:500})}}
