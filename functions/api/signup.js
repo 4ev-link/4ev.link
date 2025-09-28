@@ -6,6 +6,6 @@ export async function onRequestPost({ request, env }) {
       return new Response('User already exists', { status: 409 });
     await env.D1_EV.prepare("INSERT INTO users (username, pass_hash) VALUES (?, ?)")
       .bind(username, pass_hash).run();
-    return Response.json({ success: true }, { status: 201 });
+    return Response.json({ success: true, username }, { status: 201 });
   } catch (e) { return new Response(e.message, { status: 500 }); }
 }
