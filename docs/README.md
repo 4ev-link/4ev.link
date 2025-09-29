@@ -58,7 +58,6 @@ curl -X POST 127.0.0.1:8787/api/links/list \
 ## Security notes
 
 - Client-side scrypt stretching (N=16384, r=8, p=1, 32 B) before the request ever leaves the browser  
-- Server re-hashes the received hash with bcrypt (cost 10) and stores only that  
 - All write endpoints require a fresh reCAPTCHA token  
 - Reserved-word blacklist prevents hijacking of paths such as api, dash, admin, etc
 
