@@ -1,1 +1,19 @@
-export async function onRequestPost({request:r,env:e}){try{const{username:u,pass_hash:h}=await r.json();if(!u||!h)return new Response("Missing fields",{status:400});const a=await e.D1_EV.prepare("SELECT pass_hash, custom_slugs FROM users WHERE username = ?").bind(u).first();if(a?.pass_hash!==h)return new Response("Invalid credentials",{status:401});let s=[];try{const l=JSON.parse(a.custom_slugs);if(Array.isArray(l))s=l}catch(r){}return Response.json(s)}catch(r){return new Response(r.message,{status:500})}}
+export async function onRequestPost({ request, env }) {
+    try {
+        const { username, pass_hash } = await request.json();
+        if (!username || !pass_hash) return new Response("Missing fields", { status: 400 });
+
+        const user = await env.D1_EV.prepare("SELECT pass_hash, custom_slugs FROM users WHERE username = ?").bind(username).first();
+        if (user?.pass_hash !== pass_hash) return new Response("Invalid credentials", { status: 401 });
+
+        let slugs = [];
+        try {
+            const parsed = JSON.parse(user.custom_slugs);
+            if (Array.isArray(parsed)) slugs = parsed;
+        } catch {}
+
+        return Response.json(slugs);
+    } catch (e) {
+        return new Response(e.message, { status: 500 });
+    }
+}
