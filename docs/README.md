@@ -3,12 +3,16 @@
 A minimalist, permanent URL shortener that runs entirely on Cloudflare's edge network.  
 No servers to maintain, no cron jobs, no expiration dates.
 
+![](/docs/ss1.png)
+
 ## What it does
 
 - Turns long URLs into short, memorable aliases such as 4ev.link/github  
 - Lets every account reserve custom slugs  
 - Serves redirects from Cloudflare's global edge—usually under 50 ms  
 - Costs nothing on the free tier (1 M requests + 1 GB KV reads / month)
+
+  ![](/docs/ss2.png)
 
 ## Tech stack
 
