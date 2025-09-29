@@ -67,7 +67,7 @@ curl -X POST 127.0.0.1:8787/api/links/list \
 - 100 000 Worker requests/day  
 - 1 GB KV reads/day  
 - 1 GB KV writes/month  
-- 100 MB D1 storage  
+- 1 GB D1 storage  
 
 For personal or small-team usage this is effectively unlimited.
 
