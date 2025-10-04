@@ -1,0 +1,17 @@
+{
+  "name": "4ev-link",
+  "version": "1.0.0",
+  "description": "A minimalist, permanent URL shortener on Cloudflare edge",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev . --port 8787 --binding D1_EV=d1-ev --kv KV_EV",
+    "deploy": "wrangler pages deploy .",
+    "tail": "wrangler pages deployment tail"
+  },
+  "keywords": ["cloudflare", "workers", "url-shortener"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.78.0"
+  }
+}

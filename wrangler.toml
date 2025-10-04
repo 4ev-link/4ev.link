@@ -1,0 +1,23 @@
+name = "4ev-link"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "D1_EV"
+database_name = "D1_EV"
+database_id = "your-d1-database-id-here"
+
+[[kv_namespaces]]
+binding = "KV_EV"
+id = "your-kv-namespace-id-here"
+
+[vars]
+# Public reCAPTCHA site key (safe to expose to clients)
+# For local dev: set in .dev.vars file
+# For production: set here or in Cloudflare dashboard
+# RECAPTCHA_SITE_KEY = "your-site-key-here"
+
+# Secrets should NEVER be stored here!
+# For local dev: set RECAPCHA_KEY in .env file
+# For production: use 'wrangler secret put RECAPCHA_KEY'
+# RECAPCHA_KEY = "DO_NOT_PUT_SECRETS_HERE"

@@ -1,0 +1,29 @@
+services:
+  4ev-link:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 4ev-link-dev
+    ports:
+      - "8787:8787"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      # Persist node_modules
+      - node_modules:/app/node_modules
+      # Persist wrangler data (D1, KV local storage)
+      - wrangler_data:/app/.wrangler
+    stdin_open: true
+    tty: true
+    networks:
+      - 4ev-network
+
+volumes:
+  node_modules:
+  wrangler_data:
+
+networks:
+  4ev-network:
+    driver: bridge
