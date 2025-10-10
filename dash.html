@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - 4ev.link</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -122,7 +122,7 @@
                                                     </div>
                                                     <div class="flex justify-end gap-2 mt-4">
                                                         <button @click="editing = false; tempSlug = link.slug; tempDest = link.destination_url; tempAnalytics = link.analytics" class="px-3 py-1 text-sm font-semibold text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-md transition-colors">Cancel</button>
-                                                        <button @click="links[index] = {...link, slug: tempSlug, destination_url: tempDest, analytics: tempAnalytics}; editing = false" class="px-3 py-1 text-sm font-semibold text-white bg-slate-800 hover:bg-slate-900 rounded-md transition-colors">Apply</button>
+                                                        <button @click="links[index].slug = tempSlug; links[index].destination_url = tempDest; links[index].analytics = tempAnalytics; editing = false" class="px-3 py-1 text-sm font-semibold text-white bg-slate-800 hover:bg-slate-900 rounded-md transition-colors">Apply</button>
                                                     </div>
                                                 </div>
                                             </li>
