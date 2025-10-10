@@ -1,7 +1,7 @@
 export async function onRequestPost({ request, env }) {
     try {
-        const { 'g-recaptcha-response': token, ...body } = await request.json();
-        const vR = await fetch("https://www.google.com/recaptcha/api/siteverify", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: `secret=${env.RECAPCHA_KEY}&response=${token}` });
+        const { 'cf-turnstile-response': token, ...body } = await request.json();
+        const vR = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ secret: env.TURNSTILE_KEY, response: token }) });
         if (!(await vR.json()).success) return new Response("CAPTCHA verification failed.", { status: 403 });
 
         const { slug, username, pass_hash } = body;
