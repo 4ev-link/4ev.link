@@ -11,8 +11,17 @@ export async function onRequestPost({ request, env }) {
             const parsed = JSON.parse(user.custom_slugs);
             if (Array.isArray(parsed)) slugs = parsed;
         } catch {}
+        
+        if (slugs.length === 0) return Response.json([]);
 
-        return Response.json(slugs);
+        const destinations = await Promise.all(slugs.map(slug => env.KV_EV.get(slug)));
+        const links = slugs.map((slug, i) => ({
+            slug: slug,
+            destination_url: destinations[i] || "",
+            analytics: false,
+        }));
+
+        return Response.json(links.reverse());
     } catch (e) {
         return new Response(e.message, { status: 500 });
     }
