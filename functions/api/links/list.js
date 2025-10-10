@@ -9,20 +9,13 @@ export async function onRequestPost({ request, env }) {
         let slugs = [];
         try {
             const parsed = JSON.parse(user.custom_slugs);
-            if (Array.isArray(parsed)) slugs = parsed.reverse();
+            if (Array.isArray(parsed)) slugs = parsed;
         } catch {}
 
-        if (slugs.length === 0) return Response.json([]);
-
-        const linkDetails = await Promise.all(
-            slugs.map(async slug => ({
-                slug,
-                destination: await env.KV_EV.get(slug) || 'Destination not found'
-            }))
-        );
-
-        return Response.json(linkDetails);
+        return Response.json(slugs);
     } catch (e) {
         return new Response(e.message, { status: 500 });
     }
 }
+
+
