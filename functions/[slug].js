@@ -1,5 +1,5 @@
 export async function onRequestGet({ request, params, env, next }) {
-  if (['dash', 'api'].includes(params.slug)) return next();
+  if (['dash', 'api', 'acceptable-use', 'abuse'].includes(params.slug)) return next();
   try {
     const dest = await env.KV_EV.get(params.slug);
     const url = dest ? `https://${dest}` : new URL('/', request.url).href;
