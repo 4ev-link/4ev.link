@@ -21,39 +21,6 @@ No servers to maintain, no cron jobs, no expiration dates.
 - **KV** – key/value lookups for lightning-fast redirects  
 - **reCAPTCHA v2** – stop bots from burning your quota
 
-## Quick deploy
-
-1. Clone the repo  
-2. Create a D1 database named D1_EV and a KV namespace named KV_EV  
-3. Add the secret RECAPCHA_KEY (Google reCAPTCHA v2 secret)  
-4. npx wrangler deploy
-
-That's it—your own instance is live.
-
-## Local dev
-
-~~~
-npm install -g wrangler   # if you don't have it
-wrangler dev              # serves on localhost:8787
-~~~
-
-## API in two lines
-
-Create:
-
-~~~
-curl -X POST 127.0.0.1:8787/api/links/create \
-  -H 'content-type: application/json' \
-  -d '{"username":"bob","pass_hash":"<scrypt-hash>","destination_url":"https://example.com/very/long","slug":"ex","g-recaptcha-response":"<token>"}'
-~~~
-
-List:
-
-~~~
-curl -X POST 127.0.0.1:8787/api/links/list \
-  -H 'content-type: application/json' \
-  -d '{"username":"bob","pass_hash":"<scrypt-hash>"}'
-~~~
 
 ## Security notes
 
