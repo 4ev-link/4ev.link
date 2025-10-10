@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - 4ev.link</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans">
     <script>if (!localStorage.getItem('username')) window.location.href = '/';</script>
@@ -82,7 +81,7 @@
                                 <i data-lucide="loader-2" class="animate-spin w-8 h-8 text-slate-400"></i>
                             </div>
                         </template>
-                        <template x-if="!loading && error && links.length === 0">
+                        <template x-if="!loading && error">
                             <p class="text-rose-500 text-center" x-text="error"></p>
                         </template>
                         <template x-if="!loading && !error">
@@ -92,49 +91,16 @@
                                 </template>
                                 <template x-if="links.length > 0">
                                     <ul class="space-y-3">
-                                        <template x-for="(link, index) in links" :key="index">
-                                            <li x-data="{ editing: false, tempSlug: link.slug, tempDest: link.destination_url, tempAnalytics: link.analytics, copied: false }">
-                                                <div x-show="!editing" class="flex items-center justify-between p-3 bg-slate-50 rounded-md border border-slate-200 hover:bg-slate-100 transition-colors">
-                                                    <div class="flex-1 truncate pr-4">
-                                                        <a :href="`/${link.slug}`" target="_blank" x-text="`${window.location.host}/${link.slug}`" class="font-mono text-slate-700 hover:underline"></a>
-                                                        <p x-text="link.destination_url" class="text-sm text-slate-500 truncate"></p>
-                                                    </div>
-                                                    <div class="flex items-center shrink-0 gap-3 text-slate-500">
-                                                        <span x-show="link.analytics" title="Analytics enabled"><i data-lucide="bar-chart-2" class="w-4 h-4 text-sky-500"></i></span>
-                                                        <button @click="navigator.clipboard.writeText(`https://${window.location.host}/${link.slug}`); copied = true; setTimeout(() => copied = false, 2000)" class="hover:text-slate-900 transition-colors"><i :data-lucide="copied ? 'check' : 'copy'" class="w-4 h-4" :class="{'text-green-600': copied}"></i></button>
-                                                        <button @click="editing = true" class="hover:text-slate-900 transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div x-show="editing" style="display:none" class="p-4 bg-slate-50 rounded-md border border-slate-200">
-                                                    <div class="space-y-3">
-                                                        <div>
-                                                            <label class="text-xs font-medium text-slate-600">Slug</label>
-                                                            <div class="flex items-center"><span class="p-2 bg-slate-200 border border-r-0 border-slate-300 rounded-l-md text-slate-500 text-sm">4ev.link/</span><input type="text" x-model="tempSlug" class="w-full p-2 bg-white font-mono text-sm border border-slate-300 rounded-r-md focus:outline-none focus:ring-1 focus:ring-slate-400"></div>
-                                                        </div>
-                                                        <div>
-                                                            <label class="text-xs font-medium text-slate-600">Destination URL</label>
-                                                            <input type="text" x-model="tempDest" class="w-full p-2 bg-white text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400">
-                                                        </div>
-                                                        <div class="flex items-center justify-between pt-1">
-                                                            <span class="text-sm text-slate-600">Enable Analytics</span>
-                                                            <input type="checkbox" :id="'a-'+index" x-model="tempAnalytics" class="hidden"><label :for="'a-'+index" class="cursor-pointer relative w-10 h-5 bg-slate-300 rounded-full transition-colors" :class="{'bg-sky-500': tempAnalytics}"><span class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform" :class="{'translate-x-5': tempAnalytics}"></span></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex justify-end gap-2 mt-4">
-                                                        <button @click="editing = false; tempSlug = link.slug; tempDest = link.destination_url; tempAnalytics = link.analytics" class="px-3 py-1 text-sm font-semibold text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-md transition-colors">Cancel</button>
-                                                        <button @click="links[index].slug = tempSlug; links[index].destination_url = tempDest; links[index].analytics = tempAnalytics; editing = false" class="px-3 py-1 text-sm font-semibold text-white bg-slate-800 hover:bg-slate-900 rounded-md transition-colors">Apply</button>
-                                                    </div>
-                                                </div>
+                                        <template x-for="slug in links" :key="slug">
+                                            <li x-data="{ copied: false }" class="flex items-center justify-between p-3 bg-slate-50 rounded-md border border-slate-200 hover:bg-slate-100 transition-colors">
+                                                <a :href="`/${slug}`" target="_blank" x-text="`${window.location.host}/${slug}`" class="font-mono text-slate-700 hover:underline"></a>
+                                                <button @click="navigator.clipboard.writeText(`https://${window.location.host}/${slug}`); copied = true; setTimeout(() => copied = false, 2000)" class="text-slate-500 hover:text-slate-900 transition-colors">
+                                                    <i data-lucide="copy" class="w-4 h-4" x-show="!copied"></i>
+                                                    <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display: none;"></i>
+                                                </button>
                                             </li>
                                         </template>
                                     </ul>
-                                    <div class="mt-8 flex flex-col items-center gap-4" x-show="hasChanges" style="display:none;">
-                                        <div class="cf-turnstile" data-sitekey="0x4AAAAAAB54R0OUQDyuiUS5" data-theme="light"></div>
-                                        <p x-text="error" x-show="error" class="text-rose-500 text-sm h-5 text-center"></p>
-                                        <button @click="saveChanges" :disabled="loading" class="w-full max-w-xs py-2.5 font-semibold rounded-lg text-white bg-slate-800 hover:bg-slate-900 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
-                                            <span x-show="!loading">Save Changes</span><i x-show="loading" data-lucide="loader-2" class="animate-spin w-6 h-6"></i>
-                                        </button>
-                                    </div>
                                 </template>
                             </div>
                         </template>
@@ -146,8 +112,9 @@
 
     <script>
         function linkForm(){return{destination_url:"",slug:"",loading:!1,error:"",result:{},copied:!1,async createLink(){this.loading=!0,this.error="",this.result={};const o=grecaptcha.getResponse();if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const e=localStorage.getItem("username"),s=localStorage.getItem("pass_hash");if(!e||!s)throw new Error("Authentication error. Please log in again.");const t=await fetch("/api/links/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({destination_url:this.destination_url,slug:this.slug||null,username:e,pass_hash:s,"g-recaptcha-response":o})});if(!t.ok)throw new Error(await t.text()||"Failed to create link.");const i=await t.json(),r=window.location.host;this.result={...i,url:`https://${r}/${i.slug}`},this.destination_url="",this.slug="",this.$dispatch("link-created"),this.$nextTick(()=>lucide.createIcons())}catch(e){this.error=e.message}finally{this.loading=!1,grecaptcha.reset()}}}}
-        function linkList(){return{links:[],originalLinks:[],loading:!0,error:"",get hasChanges(){return JSON.stringify(this.links)!==JSON.stringify(this.originalLinks)},async fetchLinks(){this.loading=!0,this.error="";try{const e=localStorage.getItem("username"),s=localStorage.getItem("pass_hash");if(!e||!s)throw new Error("Authentication error.");const t=await fetch("/api/links/list",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:e,pass_hash:s})});if(!t.ok)throw new Error(await t.text()||"Failed to fetch links.");const i=await t.json();this.links=i,this.originalLinks=JSON.parse(JSON.stringify(i))}catch(e){this.error=e.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}},async saveChanges(){this.loading=!0,this.error="";const e=turnstile.getResponse();if(!e)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const s=[],t=localStorage.getItem("username"),i=localStorage.getItem("pass_hash");this.links.forEach((o,n)=>{const r=this.originalLinks[n];JSON.stringify(o)!==JSON.stringify(r)&&s.push({originalSlug:r.slug,slug:o.slug,destination_url:o.destination_url,analytics:o.analytics})});if(0===s.length)return;const o=await fetch("/api/links/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:t,pass_hash:i,changes:s,"cf-turnstile-response":e})});if(!o.ok)throw new Error(await o.text()||"Failed to update links.");const n=await o.text();this.originalLinks=JSON.parse(JSON.stringify(this.links))}catch(s){this.error=s.message}finally{this.loading=!1,turnstile.reset(),this.$nextTick(()=>lucide.createIcons())}}}}
+        function linkList(){return{links:[],loading:!0,error:"",async fetchLinks(){this.loading=!0,this.error="";try{const e=localStorage.getItem("username"),s=localStorage.getItem("pass_hash");if(!e||!s)throw new Error("Authentication error.");const t=await fetch("/api/links/list",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:e,pass_hash:s})});if(!t.ok)throw new Error(await t.text()||"Failed to fetch links.");this.links=(await t.json()).reverse()}catch(e){this.error=e.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}}}}
         lucide.createIcons();
     </script>
 </body>
 </html>
+
