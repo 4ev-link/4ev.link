@@ -32,6 +32,9 @@
                     <button @click="runAction('create-schema')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 transition-colors disabled:opacity-50">
                         Create Schema v1
                     </button>
+                    <button @click="runAction('create-schema-v2')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50">
+                        Schema v2 (Analytics)
+                    </button>
                     <button @click="runAction('read-schema')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors disabled:opacity-50">
                         Read Current Schema
                     </button>
