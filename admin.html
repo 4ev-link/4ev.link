@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - 4ev.link</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center font-sans">
+    <div x-data="adminPage()" class="max-w-2xl w-full p-8 text-center">
+        <h1 class="text-3xl font-bold mb-4">Admin Panel</h1>
+
+        <template x-if="!authenticated">
+            <form @submit.prevent="authenticated = !!password" class="space-y-4 max-w-sm mx-auto">
+                <div>
+                    <label for="adminPass" class="block text-sm font-medium text-slate-400 mb-1">Enter Admin Password</label>
+                    <input x-model="password" type="password" id="adminPass" required class="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+                </div>
+                <button type="submit" class="w-full py-3 font-semibold rounded-lg text-white bg-sky-600 hover:bg-sky-700 transition-colors">
+                    Unlock
+                </button>
+            </form>
+        </template>
+
+        <template x-if="authenticated">
+            <div class="space-y-6">
+                <p class="text-slate-400">Authenticated. Select an action.</p>
+                <div class="flex justify-center gap-4">
+                    <button @click="runAction('create-schema')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 transition-colors disabled:opacity-50">
+                        Create Schema v1
+                    </button>
+                    <button @click="runAction('read-schema')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors disabled:opacity-50">
+                        Read Current Schema
+                    </button>
+                </div>
+                <div class="min-h-[10rem] bg-slate-800 rounded-lg p-4 border border-slate-700 text-left">
+                    <div x-show="loading" class="flex justify-center items-center h-full">
+                         <i data-lucide="loader-2" class="animate-spin w-8 h-8 text-slate-400"></i>
+                    </div>
+                    <p x-show="error" class="text-rose-400" x-text="error"></p>
+                    <pre x-show="output" class="text-slate-300 whitespace-pre-wrap" x-text="output"></pre>
+                    <p x-show="!loading && !error && !output" class="text-slate-500 text-center">Output will appear here...</p>
+                </div>
+                 <a href="/" class="mt-8 inline-block text-sky-500 hover:underline">&larr; Back to home</a>
+            </div>
+        </template>
+    </div>
+    
+    <script>
+      function adminPage(){return{password:"",authenticated:!1,loading:!1,error:"",output:"",async runAction(t){this.loading=!0,this.error="",this.output="";try{const s=await fetch(`/api/admin/${t}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password})});if(!s.ok)throw new Error(await s.text()||`Failed to ${t}`);this.output=await s.text()}catch(s){this.error=s.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}}}}
+      lucide.createIcons();
+    </script>
+</body>
+</html>
