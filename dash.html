@@ -81,7 +81,7 @@
                             </template>
 
                             <template x-if="editingSlug">
-                                <div x-data="editForm()" x-init="init()">
+                                <div :key="editingSlug" x-data="editForm()" x-init="init()">
                                     <button @click="editingSlug = null" class="text-slate-500 hover:text-slate-900 mb-4 flex items-center gap-1">
                                         <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
                                     </button>
