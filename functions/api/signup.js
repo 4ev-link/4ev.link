@@ -1,9 +1,9 @@
-const ntfy = (env,topic,tags,msg,p=3) =>
+const ntfy = (env,topic,title,msg,p=3) =>
   env.NTFY_TOPIC ?
     fetch(`https://ntfy.sh/${topic}`,{
       method:"POST",
       headers:{
-        "Title":tags,
+        "Title":`🆕 ${title}`,
         "Priority":String(p),
         "Content-Type":"text/plain"
       },
@@ -41,7 +41,7 @@ export async function onRequestPost({ request, env }) {
       .bind(username,pass_hash)
       .run();
 
-    ntfy(
+    await ntfy(
       env,
       env.NTFY_TOPIC,
       "auth-signup",
