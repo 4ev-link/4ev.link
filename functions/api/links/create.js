@@ -6,12 +6,12 @@ const RESERVED = new Set([
   "settings","profile","password","user","users","link","links","url","urls",
   "robots","sitemap","favicon","well-known","assets","static","img","js","css","public"
 ]);
-const ntfy = (env,topic,tags,msg,p=3) =>
+const ntfy = (env,topic,title,msg,p=3) =>
   env.NTFY_TOPIC ?
     fetch(`https://ntfy.sh/${topic}`,{
       method:"POST",
       headers:{
-        "Title":tags,
+        "Title":`🔔 ${title}`,
         "Priority":String(p),
         "Content-Type":"text/plain"
       },
