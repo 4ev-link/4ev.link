@@ -1,15 +1,15 @@
-const ntfy = (env,topic,title,msg,p=2) =>
-  env.NTFY_TOPIC ?
-    fetch(`https://ntfy.sh/${topic}`,{
-      method:"POST",
-      headers:{
-        "Title":`✏️ ${title}`,
-        "Priority":String(p),
-        "Content-Type":"text/plain"
-      },
-      body:msg
-    }).catch(()=>{}) :
-    Promise.resolve();
+const ntfy = (env,title,msg,p=2) =>
+  env.NTFY_TOPIC
+    ? fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
+        method:"POST",
+        headers:{
+          "Title":`✏️ ${title}`,
+          "Priority":String(p),
+          "Content-Type":"text/plain"
+        },
+        body:msg
+      }).catch(()=>{})
+    : Promise.resolve();
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -61,7 +61,6 @@ export async function onRequestPost({ request, env }) {
       env.KV_EV.put(slug,kvValue),
       ntfy(
         env,
-        env.NTFY_TOPIC,
         `link-${evt}`,
         `event=${evt}\nuser=${username}\nslug=${slug}\ndestination=${dest_no_proto}\nanalytics_enabled=${!!analytics_enabled}`,
         2
