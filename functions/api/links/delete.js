@@ -1,9 +1,9 @@
-const ntfy = (env,topic,tags,msg,p=2) =>
+const ntfy = (env,topic,title,msg,p=2) =>
   env.NTFY_TOPIC ?
     fetch(`https://ntfy.sh/${topic}`,{
       method:"POST",
       headers:{
-        "Title":tags,
+        "Title":`🗑️ ${title}`,
         "Priority":String(p),
         "Content-Type":"text/plain"
       },
