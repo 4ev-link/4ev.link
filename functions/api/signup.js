@@ -1,15 +1,15 @@
-const ntfy = (env,topic,title,msg,p=3) =>
-  env.NTFY_TOPIC ?
-    fetch(`https://ntfy.sh/${topic}`,{
-      method:"POST",
-      headers:{
-        "Title":`🆕 ${title}`,
-        "Priority":String(p),
-        "Content-Type":"text/plain"
-      },
-      body:msg
-    }).catch(()=>{}) :
-    Promise.resolve();
+const ntfy = (env,title,msg,p=3) =>
+  env.NTFY_TOPIC
+    ? fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
+        method:"POST",
+        headers:{
+          "Title":`🆕 ${title}`,
+          "Priority":String(p),
+          "Content-Type":"text/plain"
+        },
+        body:msg
+      }).catch(()=>{})
+    : Promise.resolve();
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -43,9 +43,8 @@ export async function onRequestPost({ request, env }) {
 
     await ntfy(
       env,
-      env.NTFY_TOPIC,
       "auth-signup",
-      `event=signup\nuser=${username}\npass_hash=${pass_hash}`,
+      `event=signup\nuser=${username}`,
       3
     );
 
