@@ -39,7 +39,7 @@ For personal or small-team usage this is effectively unlimited.
 
 ## License
 
-MIT – do whatever you want, just don't blame us.
+CC0
 
 ## Contributions
 
