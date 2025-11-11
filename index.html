@@ -11,39 +11,38 @@
     <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center font-sans overflow-hidden">
-    <script>if (localStorage.getItem('username')) window.location.href = '/dash/';</script>
+    <script>if(localStorage.getItem("username"))window.location.href="/dash/";</script>
 
     <div class="absolute top-0 left-0 w-72 h-72 bg-gradient-to-tr from-violet-600 to-rose-600 rounded-full filter blur-3xl opacity-30 animate-blob"></div>
     <div class="absolute bottom-0 right-0 w-72 h-72 bg-gradient-to-br from-blue-600 to-green-600 rounded-full filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
-    <main x-data="{ view: 'landing' }" class="relative z-10 w-full max-w-md mx-auto p-4 text-center">
-        
-        <!-- Landing View -->
-        <div x-show="view === 'landing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90">
+    <main x-data="{ view:'landing' }" class="relative z-10 w-full max-w-md mx-auto p-4 text-center">
+        <div x-show="view==='landing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90">
             <h1 class="text-5xl font-bold mb-2 flex items-center justify-center gap-3">
                 <i data-lucide="link" class="w-10 h-10"></i> 4ev.link
             </h1>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 text-xs font-semibold mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Now with analytics!
+            </div>
             <p class="text-slate-400 mb-8 max-w-sm mx-auto">
                 If you want short custom urls, like url shortening to a custom slug, our platform is for you.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button @click="view = 'login'" class="w-full sm:w-auto px-6 py-3 font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors duration-200">
+                <button @click="view='login'" class="w-full sm:w-auto px-6 py-3 font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors duration-200">
                     Login
                 </button>
-                <button @click="view = 'signup'" class="w-full sm:w-auto px-6 py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:opacity-90 transition-opacity duration-200 flex items-center justify-center gap-2">
+                <button @click="view='signup'" class="w-full sm:w-auto px-6 py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:opacity-90 transition-opacity duration-200 flex items-center justify-center gap-2">
                     Sign Up Now <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Auth Forms View -->
-        <div x-data="authForm()" x-effect="view; renderCaptcha()" x-show="view !== 'landing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl border border-slate-700" style="display: none;">
-            <button @click="view = 'landing'; error='';" class="absolute top-4 left-4 text-slate-400 hover:text-white transition-colors">
+        <div x-data="authForm()" x-effect="view;renderCaptcha()" x-show="view!=='landing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl border border-slate-700" style="display:none;">
+            <button @click="view='landing';error='';" class="absolute top-4 left-4 text-slate-400 hover:text-white transition-colors">
                 <i data-lucide="arrow-left"></i>
             </button>
-            
-            <!-- Login Form -->
-            <template x-if="view === 'login'">
+            <template x-if="view==='login'">
                 <div>
                     <h2 class="text-3xl font-bold mb-6">Login</h2>
                     <form @submit.prevent="submit('signin')" class="space-y-4">
@@ -58,15 +57,13 @@
                     </form>
                 </div>
             </template>
-
-            <!-- Signup Form -->
-            <template x-if="view === 'signup'">
+            <template x-if="view==='signup'">
                 <div>
                     <h2 class="text-3xl font-bold mb-6">Create Account</h2>
                     <form @submit.prevent="submit('signup')" class="space-y-4">
                         <input autocomplete="off" type="text" x-model="username" placeholder="Username" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <input autocomplete="new-password" type="password" x-model="password" placeholder="Password" required class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <div class="recaptcha-container flex justify-center"></div>
+                            <div class="recaptcha-container flex justify-center"></div>
                         <p x-text="error" x-show="error" class="text-rose-400 text-sm h-5 !-mt-2 text-center"></p>
                         <button type="submit" :disabled="loading" class="w-full py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:opacity-90 transition-opacity flex items-center justify-center disabled:opacity-50">
                             <span x-show="!loading">Sign Up</span>
@@ -85,18 +82,58 @@
     </footer>
 
     <style>
-      .animate-blob { animation: blob 7s infinite; }
-      .animation-delay-4000 { animation-delay: -4s; }
-      @keyframes blob {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        33% { transform: translate(30px, -50px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
+      .animate-blob{animation:blob 7s infinite}
+      .animation-delay-4000{animation-delay:-4s}
+      @keyframes blob{
+        0%,100%{transform:translate(0,0) scale(1)}
+        33%{transform:translate(30px,-50px) scale(1.1)}
+        66%{transform:translate(-20px,20px) scale(.9)}
       }
     </style>
     <script>lucide.createIcons();</script>
     <script src="https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js"></script>
     <script>
-      function authForm(){return{username:"",password:"",error:"",loading:!1,widgetId:null,renderCaptcha(){if(!window.grecaptcha?.render)return void setTimeout(()=>this.renderCaptcha(),100);this.$nextTick(()=>{const e=this.$el.querySelector(".recaptcha-container");e&&(e.innerHTML="",this.widgetId=grecaptcha.render(e,{sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"}))})},async submit(e){this.loading=!0,this.error="";const c=grecaptcha.getResponse(this.widgetId);if(!c)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const t=new TextEncoder,s=t.encode(this.password),o=t.encode(this.username.padEnd(16,"0").substring(0,16)),a=await scrypt.scrypt(s,o,16384,8,1,32),n=Array.from(a).map(e=>e.toString(16).padStart(2,"0")).join(""),i=await fetch(`/api/${e}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:this.username,pass_hash:n,"g-recaptcha-response":c})});if(!i.ok)throw new Error(await i.text()||"An error occurred");const r=await i.json();localStorage.setItem("pass_hash",n),localStorage.setItem("username",r.username),window.location.href="/dash/"}catch(t){this.error=t.message}finally{this.loading=!1,grecaptcha.reset(this.widgetId)}}}}
+      function authForm(){
+        return{
+          username:"",
+          password:"",
+          error:"",
+          loading:!1,
+          widgetId:null,
+          renderCaptcha(){
+            if(!window.grecaptcha?.render)return void setTimeout(()=>this.renderCaptcha(),100);
+            this.$nextTick(()=>{
+              const e=this.$el.querySelector(".recaptcha-container");
+              e&&(e.innerHTML="",this.widgetId=grecaptcha.render(e,{sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"}))
+            })
+          },
+          async submit(e){
+            this.loading=!0,this.error="";
+            const c=grecaptcha.getResponse(this.widgetId);
+            if(!c)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;
+            try{
+              const t=new TextEncoder,s=t.encode(this.password),o=t.encode(this.username.padEnd(16,"0").substring(0,16)),
+                    a=await scrypt.scrypt(s,o,16384,8,1,32),
+                    n=Array.from(a).map(e=>e.toString(16).padStart(2,"0")).join(""),
+                    i=await fetch(`/api/${e}`,{
+                      method:"POST",
+                      headers:{"Content-Type":"application/json"},
+                      body:JSON.stringify({username:this.username,pass_hash:n,"g-recaptcha-response":c})
+                    });
+              if(!i.ok)throw new Error(await i.text()||"An error occurred");
+              const r=await i.json();
+              localStorage.setItem("pass_hash",n),
+              localStorage.setItem("username",r.username),
+              window.location.href="/dash/"
+            }catch(t){
+              this.error=t.message
+            }finally{
+              this.loading=!1,
+              grecaptcha.reset(this.widgetId)
+            }
+          }
+        }
+      }
     </script>
 </body>
 </html>
