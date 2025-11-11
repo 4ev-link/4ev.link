@@ -12,9 +12,9 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans">
-    <script>if (!localStorage.getItem('username')) window.location.href = '/';</script>
+    <script>if(!localStorage.getItem("username"))window.location.href="/";</script>
 
-    <div x-data="dashboard()" x-init="fetchLinks()" @link-created.window="fetchLinks()" @keydown.escape.window="sidebarOpen = false" class="min-h-screen flex flex-col">
+    <div x-data="dashboard()" x-init="fetchLinks()" @link-created.window="fetchLinks()" @keydown.escape.window="sidebarOpen=!1" class="min-h-screen flex flex-col">
         <header class="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -23,10 +23,10 @@
                     </a>
                     <div class="flex items-center gap-4">
                         <span class="text-slate-600">Welcome, <strong x-text="user"></strong></span>
-                        <button @click="sidebarOpen = !sidebarOpen" class="text-slate-500 hover:text-slate-900 transition-colors">
+                        <button @click="sidebarOpen=!sidebarOpen" class="text-slate-500 hover:text-slate-900 transition-colors">
                             <i data-lucide="panel-right" class="w-5 h-5"></i>
                         </button>
-                        <button @click="localStorage.clear(); window.location.href='/'" class="text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                        <button @click="localStorage.clear();window.location.href='/'" class="text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors">
                             Logout
                         </button>
                     </div>
@@ -49,11 +49,14 @@
                                             <p class="font-semibold">Success! Your link is ready:</p>
                                             <div class="flex items-center gap-2 mt-2">
                                                 <a :href="result.url" x-text="result.url" target="_blank" class="font-mono text-slate-700 hover:underline"></a>
-                                                <button @click="navigator.clipboard.writeText(result.url); copied = true; setTimeout(() => copied = false, 2000)" class="text-slate-500 hover:text-slate-900">
+                                                <button @click="navigator.clipboard.writeText(result.url);copied=!0;setTimeout(()=>copied=!1,2000)" class="text-slate-500 hover:text-slate-900">
                                                     <i data-lucide="copy" class="w-4 h-4" x-show="!copied"></i>
-                                                    <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display: none;"></i>
+                                                    <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display:none;"></i>
                                                 </button>
                                             </div>
+                                            <p class="text-xs text-green-900 mt-2">
+                                                Want click stats? Select this link in your sidebar later to enable analytics.
+                                            </p>
                                         </div>
                                     </template>
                                     
@@ -82,7 +85,7 @@
 
                             <template x-if="editingSlug">
                                 <div x-data="editForm()" x-init="init()">
-                                    <button @click="editingSlug = null" class="text-slate-500 hover:text-slate-900 mb-4 flex items-center gap-1">
+                                    <button @click="editingSlug=null" class="text-slate-500 hover:text-slate-900 mb-4 flex items-center gap-1">
                                         <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
                                     </button>
                                     <h1 class="text-2xl font-bold mb-1">Edit link</h1>
@@ -95,8 +98,18 @@
                                         </div>
                                         <div class="flex items-center justify-between py-2">
                                             <span class="text-sm font-medium text-slate-700">Enable Analytics</span>
-                                            <button type="button" @click="analyticsEnabled = !analyticsEnabled; fetchAnalytics()" :class="analyticsEnabled ? 'bg-slate-800' : 'bg-slate-200'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2" role="switch" :aria-checked="analyticsEnabled">
-                                                <span :class="analyticsEnabled ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+                                            <button
+                                                type="button"
+                                                @click="analyticsEnabled=!analyticsEnabled;fetchAnalytics()"
+                                                :class="analyticsEnabled ? 'bg-slate-800' : 'bg-slate-200'"
+                                                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+                                                role="switch"
+                                                :aria-checked="analyticsEnabled"
+                                            >
+                                                <span
+                                                    :class="analyticsEnabled ? 'translate-x-5' : 'translate-x-0'"
+                                                    class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                                ></span>
                                             </button>
                                         </div>
                                         <div class="turnstile-container my-4 flex justify-center"></div>
@@ -112,7 +125,7 @@
                                         </div>
                                     </form>
 
-                                    <template x-if="analyticsEnabled && analytics.length > 0">
+                                    <template x-if="analyticsEnabled && analytics.length>0">
                                         <div class="mt-8 pt-6 border-t border-slate-200">
                                             <h3 class="text-lg font-semibold mb-4">Analytics</h3>
                                             <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
@@ -128,7 +141,7 @@
                                         </div>
                                     </template>
 
-                                    <template x-if="analyticsEnabled && analytics.length === 0 && !loadingAnalytics">
+                                    <template x-if="analyticsEnabled && analytics.length===0 && !loadingAnalytics">
                                         <div class="mt-8 pt-6 border-t border-slate-200">
                                             <h3 class="text-lg font-semibold mb-4">Analytics</h3>
                                             <p class="text-slate-500 text-center py-4">No analytics data yet. Share your link to start collecting data!</p>
@@ -152,17 +165,20 @@
                             </template>
                             <template x-if="!loadingLinks && !errorLinks">
                                 <div>
-                                    <template x-if="links.length === 0">
+                                    <template x-if="links.length===0">
                                         <p class="text-slate-500 text-center py-4">You haven't created any links yet.</p>
                                     </template>
-                                    <template x-if="links.length > 0">
+                                    <template x-if="links.length>0">
                                         <ul class="space-y-3">
                                             <template x-for="slug in links" :key="slug">
-                                                <li x-data="{ copied: false }" class="flex items-center justify-between p-3 bg-slate-50 rounded-md border border-slate-200 hover:bg-slate-100 transition-colors">
+                                                <li x-data="{ copied:!1 }" class="flex items-center justify-between p-3 bg-slate-50 rounded-md border border-slate-200 hover:bg-slate-100 transition-colors">
                                                     <a :href="`/${slug}`" target="_blank" x-text="`${window.location.host}/${slug}`" class="font-mono text-slate-700 hover:underline"></a>
-                                                    <button @click="navigator.clipboard.writeText(`https://${window.location.host}/${slug}`); copied = true; setTimeout(() => copied = false, 2000)" class="text-slate-500 hover:text-slate-900 transition-colors">
+                                                    <button
+                                                        @click="navigator.clipboard.writeText(`https://${window.location.host}/${slug}`);copied=!0;setTimeout(()=>copied=!1,2000)"
+                                                        class="text-slate-500 hover:text-slate-900 transition-colors"
+                                                    >
                                                         <i data-lucide="copy" class="w-4 h-4" x-show="!copied"></i>
-                                                        <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display: none;"></i>
+                                                        <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display:none;"></i>
                                                     </button>
                                                 </li>
                                             </template>
@@ -175,11 +191,22 @@
                 </div>
             </main>
 
-            <aside x-show="sidebarOpen" @click.away="sidebarOpen = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-full" x-transition:enter-end="opacity-100 transform translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-x-0" x-transition:leave-end="opacity-0 transform translate-x-full" class="fixed right-0 top-16 bottom-0 w-80 bg-white border-l border-slate-200 shadow-lg z-20 overflow-y-auto" style="display: none;">
+            <aside
+                x-show="sidebarOpen"
+                @click.away="sidebarOpen=!1"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform translate-x-full"
+                x-transition:enter-end="opacity-100 transform translate-x-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 transform translate-x-0"
+                x-transition:leave-end="opacity-0 transform translate-x-full"
+                class="fixed right-0 top-16 bottom-0 w-80 bg-white border-l border-slate-200 shadow-lg z-20 overflow-y-auto"
+                style="display:none;"
+            >
                 <div class="p-4">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-lg">Your Links</h3>
-                        <button @click="sidebarOpen = false" class="text-slate-500 hover:text-slate-900">
+                        <button @click="sidebarOpen=!1" class="text-slate-500 hover:text-slate-900">
                             <i data-lucide="x" class="w-5 h-5"></i>
                         </button>
                     </div>
@@ -191,14 +218,18 @@
                     <template x-if="!loadingLinks && errorLinks">
                         <p class="text-rose-500 text-sm text-center" x-text="errorLinks"></p>
                     </template>
-                    <template x-if="!loadingLinks && !errorLinks && links.length === 0">
+                    <template x-if="!loadingLinks && !errorLinks && links.length===0">
                         <p class="text-slate-500 text-sm text-center py-8">No links yet</p>
                     </template>
-                    <template x-if="!loadingLinks && !errorLinks && links.length > 0">
+                    <template x-if="!loadingLinks && !errorLinks && links.length>0">
                         <ul class="space-y-2">
                             <template x-for="slug in links" :key="slug">
                                 <li>
-                                    <button @click="editingSlug = slug; sidebarOpen = false" class="w-full text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors font-mono text-sm" x-text="slug"></button>
+                                    <button
+                                        @click="editingSlug=slug;sidebarOpen=!1"
+                                        class="w-full text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors font-mono text-sm"
+                                        x-text="slug"
+                                    ></button>
                                 </li>
                             </template>
                         </ul>
@@ -214,9 +245,210 @@
     </div>
 
     <script>
-        function dashboard(){return{user:localStorage.getItem("username"),sidebarOpen:!1,editingSlug:null,links:[],loadingLinks:!0,errorLinks:"",async fetchLinks(){this.loadingLinks=!0,this.errorLinks="";try{const e=localStorage.getItem("username"),t=localStorage.getItem("pass_hash");if(!e||!t)throw new Error("Authentication error.");const s=await fetch("/api/links/list",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:e,pass_hash:t})});if(!s.ok)throw new Error(await s.text()||"Failed to fetch links.");this.links=(await s.json()).reverse()}catch(e){this.errorLinks=e.message}finally{this.loadingLinks=!1,this.$nextTick(()=>lucide.createIcons())}}}}
-        function linkForm(){return{destination_url:"",slug:"",loading:!1,error:"",result:{},copied:!1,widgetId:null,renderCaptcha(){if(!window.grecaptcha?.render)return setTimeout(()=>this.renderCaptcha(),100);this.$nextTick(()=>{const e=this.$el.querySelector(".recaptcha-container");e&&(e.innerHTML="",this.widgetId=grecaptcha.render(e,{sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"}))})},async createLink(){this.loading=!0,this.error="",this.result={};const o=grecaptcha.getResponse(this.widgetId);if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const e=localStorage.getItem("username"),s=localStorage.getItem("pass_hash");if(!e||!s)throw new Error("Authentication error.");const t=await fetch("/api/links/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({destination_url:this.destination_url,slug:this.slug||null,username:e,pass_hash:s,"g-recaptcha-response":o})});if(!t.ok)throw new Error(await t.text()||"Failed to create link.");const i=await t.json(),r=window.location.host;this.result={...i,url:`https://${r}/${i.slug}`},this.destination_url="",this.slug="",this.$dispatch("link-created"),this.$nextTick(()=>lucide.createIcons())}catch(e){this.error=e.message}finally{this.loading=!1,grecaptcha.reset(this.widgetId)}}}}
-        function editForm(){return{destination_url:"",analyticsEnabled:!1,analytics:[],loadingAnalytics:!1,loading:!1,error:"",widgetId:null,init(){this.$watch("editingSlug",t=>{t&&this.loadDataForSlug(t)}),this.editingSlug&&this.loadDataForSlug(this.editingSlug)},async loadDataForSlug(t){this.destination_url="",this.analyticsEnabled=!1,this.analytics=[],this.error="",this.renderTurnstile();try{const s=await fetch(`/api/links/get?slug=${t}`);if(!s.ok)throw new Error(await s.text()||"Failed to load link");const i=await s.json();if(this.destination_url=i.destination_url.startsWith("http")?i.destination_url:`https://${i.destination_url}`,this.analyticsEnabled=i.analytics_enabled||!1,this.analyticsEnabled){this.loadingAnalytics=!0;try{const s=await fetch(`/api/analytics/get?slug=${t}`);if(!s.ok)throw new Error(await s.text()||"Failed to load analytics");this.analytics=await s.json()}finally{this.loadingAnalytics=!1}}}catch(s){this.error=s.message}finally{this.$nextTick(()=>lucide.createIcons())}},renderTurnstile(){if(!window.turnstile?.render)return setTimeout(()=>this.renderTurnstile(),100);this.$nextTick(()=>{const t=this.$el.querySelector(".turnstile-container");t&&(t.innerHTML="",this.widgetId=turnstile.render(t,{sitekey:"0x4AAAAAAB54R0OUQDyuiUS5"}))})},async updateLink(){this.loading=!0,this.error="";const o=turnstile.getResponse(this.widgetId);if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const t=localStorage.getItem("username"),s=localStorage.getItem("pass_hash");if(!t||!s)throw new Error("Authentication error.");const i=await fetch("/api/links/update",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({slug:this.editingSlug,destination_url:this.destination_url,analytics_enabled:this.analyticsEnabled,username:t,pass_hash:s,"cf-turnstile-response":o})});if(!i.ok)throw new Error(await i.text()||"Failed to update link.");this.editingSlug=null,this.$dispatch("link-created")}catch(t){this.error=t.message}finally{this.loading=!1,turnstile.reset(this.widgetId)}},async deleteLink(){if(!confirm("Are you sure you want to delete this link?"))return;this.loading=!0,this.error="";const o=turnstile.getResponse(this.widgetId);if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;try{const t=localStorage.getItem("username"),s=localStorage.getItem("pass_hash");if(!t||!s)throw new Error("Authentication error.");const i=await fetch("/api/links/delete",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({slug:this.editingSlug,username:t,pass_hash:s,"cf-turnstile-response":o})});if(!i.ok)throw new Error(await i.text()||"Failed to delete link.");this.editingSlug=null,this.$dispatch("link-created")}catch(t){this.error=t.message}finally{this.loading=!1,turnstile.reset(this.widgetId)}}}}
+        function dashboard(){
+          return{
+            user:localStorage.getItem("username"),
+            sidebarOpen:!1,
+            editingSlug:null,
+            links:[],
+            loadingLinks:!0,
+            errorLinks:"",
+            async fetchLinks(){
+              this.loadingLinks=!0,this.errorLinks="";
+              try{
+                const e=localStorage.getItem("username"),
+                      t=localStorage.getItem("pass_hash");
+                if(!e||!t)throw new Error("Authentication error.");
+                const s=await fetch("/api/links/list",{
+                  method:"POST",
+                  headers:{"Content-Type":"application/json"},
+                  body:JSON.stringify({username:e,pass_hash:t})
+                });
+                if(!s.ok)throw new Error(await s.text()||"Failed to fetch links.");
+                this.links=(await s.json()).reverse()
+              }catch(e){
+                this.errorLinks=e.message
+              }finally{
+                this.loadingLinks=!1,
+                this.$nextTick(()=>lucide.createIcons())
+              }
+            }
+          }
+        }
+        function linkForm(){
+          return{
+            destination_url:"",
+            slug:"",
+            loading:!1,
+            error:"",
+            result:{},
+            copied:!1,
+            widgetId:null,
+            renderCaptcha(){
+              if(!window.grecaptcha?.render)return setTimeout(()=>this.renderCaptcha(),100);
+              this.$nextTick(()=>{
+                const e=this.$el.querySelector(".recaptcha-container");
+                e&&(e.innerHTML="",this.widgetId=grecaptcha.render(e,{sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"}))
+              })
+            },
+            async createLink(){
+              this.loading=!0,this.error="",this.result={};
+              const o=grecaptcha.getResponse(this.widgetId);
+              if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;
+              try{
+                const e=localStorage.getItem("username"),
+                      s=localStorage.getItem("pass_hash");
+                if(!e||!s)throw new Error("Authentication error.");
+                const t=await fetch("/api/links/create",{
+                  method:"POST",
+                  headers:{"Content-Type":"application/json"},
+                  body:JSON.stringify({
+                    destination_url:this.destination_url,
+                    slug:this.slug||null,
+                    username:e,
+                    pass_hash:s,
+                    "g-recaptcha-response":o
+                  })
+                });
+                if(!t.ok)throw new Error(await t.text()||"Failed to create link.");
+                const i=await t.json(),
+                      r=window.location.host;
+                this.result={...i,url:`https://${r}/${i.slug}`},
+                this.destination_url="",
+                this.slug="",
+                this.$dispatch("link-created"),
+                this.$nextTick(()=>lucide.createIcons())
+              }catch(e){
+                this.error=e.message
+              }finally{
+                this.loading=!1,
+                grecaptcha.reset(this.widgetId)
+              }
+            }
+          }
+        }
+        function editForm(){
+          return{
+            destination_url:"",
+            analyticsEnabled:!1,
+            analytics:[],
+            loadingAnalytics:!1,
+            loading:!1,
+            error:"",
+            widgetId:null,
+            init(){
+              this.$watch("editingSlug",t=>{t&&this.loadDataForSlug(t)}),
+              this.editingSlug&&this.loadDataForSlug(this.editingSlug)
+            },
+            async loadDataForSlug(t){
+              this.destination_url="",
+              this.analyticsEnabled=!1,
+              this.analytics=[],
+              this.error="",
+              this.renderTurnstile();
+              try{
+                const s=await fetch(`/api/links/get?slug=${t}`);
+                if(!s.ok)throw new Error(await s.text()||"Failed to load link");
+                const i=await s.json();
+                this.destination_url=i.destination_url.startsWith("http")?i.destination_url:`https://${i.destination_url}`,
+                this.analyticsEnabled=i.analytics_enabled||!1;
+                if(this.analyticsEnabled){
+                  this.loadingAnalytics=!0;
+                  try{
+                    const a=await fetch(`/api/analytics/get?slug=${t}`);
+                    if(!a.ok)throw new Error(await a.text()||"Failed to load analytics");
+                    this.analytics=await a.json()
+                  }finally{
+                    this.loadingAnalytics=!1
+                  }
+                }
+              }catch(s){
+                this.error=s.message
+              }finally{
+                this.$nextTick(()=>lucide.createIcons())
+              }
+            },
+            renderTurnstile(){
+              if(!window.turnstile?.render)return setTimeout(()=>this.renderTurnstile(),100);
+              this.$nextTick(()=>{
+                const t=this.$el.querySelector(".turnstile-container");
+                t&&(t.innerHTML="",this.widgetId=turnstile.render(t,{sitekey:"0x4AAAAAAB54R0OUQDyuiUS5"}))
+              })
+            },
+            async updateLink(){
+              this.loading=!0,this.error="";
+              const o=turnstile.getResponse(this.widgetId);
+              if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;
+              try{
+                const t=localStorage.getItem("username"),
+                      s=localStorage.getItem("pass_hash");
+                if(!t||!s)throw new Error("Authentication error.");
+                const i=await fetch("/api/links/update",{
+                  method:"POST",
+                  headers:{"Content-Type":"application/json"},
+                  body:JSON.stringify({
+                    slug:this.editingSlug,
+                    destination_url:this.destination_url,
+                    analytics_enabled:this.analyticsEnabled,
+                    username:t,
+                    pass_hash:s,
+                    "cf-turnstile-response":o
+                  })
+                });
+                if(!i.ok)throw new Error(await i.text()||"Failed to update link.");
+                this.editingSlug=null,
+                this.$dispatch("link-created")
+              }catch(t){
+                this.error=t.message
+              }finally{
+                this.loading=!1,
+                turnstile.reset(this.widgetId)
+              }
+            },
+            async deleteLink(){
+              if(!confirm("Are you sure you want to delete this link?"))return;
+              this.loading=!0,this.error="";
+              const o=turnstile.getResponse(this.widgetId);
+              if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;
+              try{
+                const t=localStorage.getItem("username"),
+                      s=localStorage.getItem("pass_hash");
+                if(!t||!s)throw new Error("Authentication error.");
+                const i=await fetch("/api/links/delete",{
+                  method:"POST",
+                  headers:{"Content-Type":"application/json"},
+                  body:JSON.stringify({
+                    slug:this.editingSlug,
+                    username:t,
+                    pass_hash:s,
+                    "cf-turnstile-response":o
+                  })
+                });
+                if(!i.ok)throw new Error(await i.text()||"Failed to delete link.");
+                this.editingSlug=null,
+                this.$dispatch("link-created")
+              }catch(t){
+                this.error=t.message
+              }finally{
+                this.loading=!1,
+                turnstile.reset(this.widgetId)
+              }
+            },
+            async fetchAnalytics(){
+              if(!this.analyticsEnabled||!this.editingSlug)return;
+              this.loadingAnalytics=!0;
+              try{
+                const r=await fetch(`/api/analytics/get?slug=${this.editingSlug}`);
+                if(!r.ok)throw new Error(await r.text()||"Failed to load analytics");
+                this.analytics=await r.json()
+              }catch(e){
+                this.error=e.message
+              }finally{
+                this.loadingAnalytics=!1
+              }
+            }
+          }
+        }
         lucide.createIcons();
     </script>
 </body>
