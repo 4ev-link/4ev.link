@@ -37,10 +37,6 @@ No servers to maintain, no cron jobs, no expiration dates.
 
 For personal or small-team usage this is effectively unlimited.
 
-## License
-
-CC0
-
 ## Contributions
 
 Issues and pull requests are welcome. Open a private security advisory first if you find anything sensitive.
