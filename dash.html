@@ -11,15 +11,14 @@
     <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700|general-sans:600,700|red-hat-mono:500" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=jetbrains-mono:400,500" rel="stylesheet" />
     <style>
       :root{
         --font-ui:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-        --font-display:"General Sans","Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-        --font-mono:"Red Hat Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
+        --font-mono:"JetBrains Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
       }
       body{font-family:var(--font-ui)}
-      .font-display{font-family:var(--font-display)}
       .font-mono-custom{font-family:var(--font-mono)}
     </style>
 </head>
@@ -36,7 +35,7 @@
         <header class="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <a href="/dash/" class="text-2xl font-display font-semibold flex items-center gap-2 tracking-tight">
+                    <a href="/dash/" class="text-2xl font-semibold flex items-center gap-2 tracking-tight">
                         <i data-lucide="link" class="w-6 h-6 text-slate-900"></i>
                         <span>4ev.link</span>
                     </a>
@@ -69,11 +68,11 @@
                         <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
                             <template x-if="!editingSlug">
                                 <div x-data="linkForm()" x-init="renderCaptcha()">
-                                    <h1 class="text-2xl font-display font-semibold mb-1 tracking-tight">
+                                    <h1 class="text-2xl font-semibold mb-1 tracking-tight">
                                       Create a new link
                                     </h1>
                                     <p class="text-slate-500 mb-6 text-sm">
-                                      Shorten a long URL into a permanent, memorable link.
+                                      Shorten a long URL into a memorable link.
                                     </p>
 
                                     <template x-if="result.url">
@@ -183,7 +182,7 @@
                                         <i data-lucide="arrow-left" class="w-4 h-4"></i>
                                         Back
                                     </button>
-                                    <h1 class="text-2xl font-display font-semibold mb-1 tracking-tight">
+                                    <h1 class="text-2xl font-semibold mb-1 tracking-tight">
                                       Edit link
                                     </h1>
                                     <p
@@ -258,7 +257,7 @@
 
                                     <template x-if="analyticsEnabled && analytics.length>0">
                                         <div class="mt-8 pt-6 border-t border-slate-200">
-                                            <h3 class="text-sm font-display font-semibold mb-4 tracking-tight">
+                                            <h3 class="text-sm font-semibold mb-4 tracking-tight">
                                               Analytics
                                             </h3>
                                             <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
@@ -282,7 +281,7 @@
 
                                     <template x-if="analyticsEnabled && analytics.length===0 && !loadingAnalytics">
                                         <div class="mt-8 pt-6 border-t border-slate-200">
-                                            <h3 class="text-sm font-display font-semibold mb-4 tracking-tight">
+                                            <h3 class="text-sm font-semibold mb-4 tracking-tight">
                                               Analytics
                                             </h3>
                                             <p class="text-slate-500 text-center py-4 text-xs">
@@ -296,7 +295,7 @@
                     </div>
 
                     <div class="max-w-2xl mx-auto mt-12" x-show="!editingSlug">
-                        <h2 class="text-2xl font-display font-semibold mb-4 tracking-tight">
+                        <h2 class="text-2xl font-semibold mb-4 tracking-tight">
                           Your Links
                         </h2>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-h-[10rem] flex flex-col justify-center text-sm">
@@ -372,7 +371,7 @@
             >
                 <div class="p-4">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-display font-semibold text-sm tracking-tight">
+                        <h3 class="font-semibold text-sm tracking-tight">
                           Your Links
                         </h3>
                         <button
