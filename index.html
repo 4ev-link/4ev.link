@@ -10,12 +10,14 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700|general-sans:600,700|red-hat-mono:500" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=architects-daughter:400" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=jetbrains-mono:400,500" rel="stylesheet" />
     <style>
       :root{
         --font-ui:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-        --font-display:"General Sans","Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-        --font-mono:"Red Hat Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
+        --font-display:"Architects Daughter","Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
       }
       body{font-family:var(--font-ui)}
       .font-display{font-family:var(--font-display)}
@@ -38,17 +40,16 @@
           x-transition:leave-start="opacity-100 transform scale-100"
           x-transition:leave-end="opacity-0 transform scale-90"
         >
-            <h1 class="text-5xl font-bold mb-2 flex items-center justify-center gap-3 font-display tracking-tight">
+            <h1 class="text-5xl mb-2 flex items-center justify-center gap-3 font-display tracking-tight">
                 <i data-lucide="link" class="w-10 h-10"></i>
                 <span class="leading-none">4ev.link</span>
             </h1>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 text-[10px] font-semibold mb-3 uppercase tracking-[0.16em]">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                Now with analytics
+                Now with analytics!
             </div>
             <p class="text-slate-400 mb-8 max-w-sm mx-auto text-sm">
-                Permanent, custom short URLs built on the edge. Fast, reliable, and yours
-                <span class="font-mono-custom text-slate-300">4ev.link/you</span>.
+                If you want short custom urls, like url shortening to a custom slug, our platform is for you.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
@@ -77,7 +78,7 @@
           x-transition:leave="transition ease-in duration-200"
           x-transition:leave-start="opacity-100 transform scale-100"
           x-transition:leave-end="opacity-0 transform scale-90"
-          class="bg-slate-900/70 backdrop-blur-sm p-8 rounded-xl border border-slate-700 text-left"
+          class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl border border-slate-700 text-left"
           style="display:none;"
         >
             <button
@@ -96,7 +97,7 @@
                           x-model="username"
                           placeholder="Username"
                           required
-                          class="w-full p-3 bg-slate-900 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
+                          class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
                         >
                         <input
                           autocomplete="current-password"
@@ -104,13 +105,13 @@
                           x-model="password"
                           placeholder="Password"
                           required
-                          class="w-full p-3 bg-slate-900 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
+                          class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
                         >
                         <div class="recaptcha-container flex justify-center"></div>
                         <p
                           x-text="error"
                           x-show="error"
-                          class="text-rose-400 text-xs h-5 !-mt-2 text-center"
+                          class="text-rose-400 text-sm h-5 !-mt-2 text-center"
                         ></p>
                         <button
                           type="submit"
@@ -137,7 +138,7 @@
                           x-model="username"
                           placeholder="Username"
                           required
-                          class="w-full p-3 bg-slate-900 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                          class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                         >
                         <input
                           autocomplete="new-password"
@@ -145,13 +146,13 @@
                           x-model="password"
                           placeholder="Password"
                           required
-                          class="w-full p-3 bg-slate-900 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                          class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                         >
                         <div class="recaptcha-container flex justify-center"></div>
                         <p
                           x-text="error"
                           x-show="error"
-                          class="text-rose-400 text-xs h-5 !-mt-2 text-center"
+                          class="text-rose-400 text-sm h-5 !-mt-2 text-center"
                         ></p>
                         <button
                           type="submit"
@@ -171,7 +172,7 @@
         </div>
     </main>
 
-    <footer class="absolute bottom-4 left-0 right-0 text-center text-slate-500 text-xs z-10 font-ui">
+    <footer class="absolute bottom-4 left-0 right-0 text-center text-slate-500 text-sm z-10">
         <a href="https://blog.4ev.link" target="_blank" class="hover:text-slate-300 transition-colors">Blog</a>
         &bull;
         <a href="/acceptable-use" class="hover:text-slate-300 transition-colors">Acceptable Use</a>
