@@ -10,23 +10,51 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700|general-sans:600,700|red-hat-mono:500" rel="stylesheet" />
+    <style>
+      :root{
+        --font-ui:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+        --font-display:"General Sans","Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+        --font-mono:"Red Hat Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
+      }
+      body{font-family:var(--font-ui)}
+      .font-display{font-family:var(--font-display)}
+      .font-mono-custom{font-family:var(--font-mono)}
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
+<body class="bg-slate-50 text-slate-800">
     <script>if(!localStorage.getItem("username"))window.location.href="/";</script>
 
-    <div x-data="dashboard()" x-init="fetchLinks()" @link-created.window="fetchLinks()" @keydown.escape.window="sidebarOpen=!1" class="min-h-screen flex flex-col">
+    <div
+      x-data="dashboard()"
+      x-init="fetchLinks()"
+      @link-created.window="fetchLinks()"
+      @keydown.escape.window="sidebarOpen=!1"
+      class="min-h-screen flex flex-col"
+    >
         <header class="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <a href="/dash/" class="text-2xl font-bold flex items-center gap-2">
-                        <i data-lucide="link" class="w-6 h-6 text-slate-800"></i> 4ev.link
+                    <a href="/dash/" class="text-2xl font-display font-semibold flex items-center gap-2 tracking-tight">
+                        <i data-lucide="link" class="w-6 h-6 text-slate-900"></i>
+                        <span>4ev.link</span>
                     </a>
-                    <div class="flex items-center gap-4">
-                        <span class="text-slate-600">Welcome, <strong x-text="user"></strong></span>
-                        <button @click="sidebarOpen=!sidebarOpen" class="text-slate-500 hover:text-slate-900 transition-colors">
+                    <div class="flex items-center gap-4 text-xs sm:text-sm">
+                        <span class="text-slate-600">
+                          Welcome,
+                          <strong x-text="user" class="font-semibold"></strong>
+                        </span>
+                        <button
+                          @click="sidebarOpen=!sidebarOpen"
+                          class="text-slate-500 hover:text-slate-900 transition-colors"
+                        >
                             <i data-lucide="panel-right" class="w-5 h-5"></i>
                         </button>
-                        <button @click="localStorage.clear();window.location.href='/'" class="text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                        <button
+                          @click="localStorage.clear();window.location.href='/'"
+                          class="font-medium text-slate-500 hover:text-slate-900 transition-colors"
+                        >
                             Logout
                         </button>
                     </div>
@@ -41,67 +69,153 @@
                         <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
                             <template x-if="!editingSlug">
                                 <div x-data="linkForm()" x-init="renderCaptcha()">
-                                    <h1 class="text-2xl font-bold mb-1">Create a new link</h1>
-                                    <p class="text-slate-500 mb-6">Shorten a long URL into a memorable link.</p>
+                                    <h1 class="text-2xl font-display font-semibold mb-1 tracking-tight">
+                                      Create a new link
+                                    </h1>
+                                    <p class="text-slate-500 mb-6 text-sm">
+                                      Shorten a long URL into a permanent, memorable link.
+                                    </p>
 
                                     <template x-if="result.url">
-                                        <div class="bg-green-100 border border-green-300 text-green-800 p-3.5 rounded-md mb-6" role="alert">
+                                        <div
+                                          class="bg-emerald-50 border border-emerald-200 text-emerald-900 p-3.5 rounded-md mb-6 text-xs sm:text-sm"
+                                          role="alert"
+                                        >
                                             <p class="font-semibold">Success! Your link is ready:</p>
                                             <div class="flex items-center gap-2 mt-2">
-                                                <a :href="result.url" x-text="result.url" target="_blank" class="font-mono text-slate-700 hover:underline"></a>
-                                                <button @click="navigator.clipboard.writeText(result.url);copied=!0;setTimeout(()=>copied=!1,2000)" class="text-slate-500 hover:text-slate-900">
-                                                    <i data-lucide="copy" class="w-4 h-4" x-show="!copied"></i>
-                                                    <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display:none;"></i>
+                                                <a
+                                                  :href="result.url"
+                                                  x-text="result.url"
+                                                  target="_blank"
+                                                  class="font-mono-custom text-slate-800 hover:underline break-all"
+                                                ></a>
+                                                <button
+                                                  @click="navigator.clipboard.writeText(result.url);copied=!0;setTimeout(()=>copied=!1,2000)"
+                                                  class="text-slate-500 hover:text-slate-900"
+                                                >
+                                                    <i
+                                                      data-lucide="copy"
+                                                      class="w-4 h-4"
+                                                      x-show="!copied"
+                                                    ></i>
+                                                    <i
+                                                      data-lucide="check"
+                                                      class="w-4 h-4 text-emerald-600"
+                                                      x-show="copied"
+                                                      style="display:none;"
+                                                    ></i>
                                                 </button>
                                             </div>
-                                            <p class="text-xs text-green-900 mt-2">
+                                            <p class="text-[10px] mt-2">
                                                 Want click stats? Select this link in your sidebar later to enable analytics.
                                             </p>
                                         </div>
                                     </template>
                                     
-                                    <form @submit.prevent="createLink" class="space-y-4">
+                                    <form @submit.prevent="createLink" class="space-y-4 text-sm">
                                         <div>
-                                            <label for="longUrl" class="block text-sm font-medium text-slate-700 mb-1">Destination URL</label>
-                                            <input x-model="destination_url" type="text" id="longUrl" placeholder="example.com/very-long-url-to-shorten" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400 transition">
+                                            <label
+                                              for="longUrl"
+                                              class="block text-xs font-medium text-slate-700 mb-1 uppercase tracking-[0.14em]"
+                                            >
+                                              Destination URL
+                                            </label>
+                                            <input
+                                              x-model="destination_url"
+                                              type="text"
+                                              id="longUrl"
+                                              placeholder="example.com/very-long-url-to-shorten"
+                                              required
+                                              class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition text-xs sm:text-sm"
+                                            >
                                         </div>
                                         <div>
-                                            <label for="customSlug" class="block text-sm font-medium text-slate-700 mb-1">Custom slug (optional)</label>
+                                            <label
+                                              for="customSlug"
+                                              class="block text-xs font-medium text-slate-700 mb-1 uppercase tracking-[0.14em]"
+                                            >
+                                              Custom slug (optional)
+                                            </label>
                                             <div class="flex items-center">
-                                                <span class="p-3 bg-slate-100 border border-r-0 border-slate-300 rounded-l-md text-slate-500">4ev.link/</span>
-                                                <input x-model="slug" type="text" id="customSlug" placeholder="my-custom-link" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400 transition">
+                                                <span class="px-3 py-3 bg-slate-100 border border-r-0 border-slate-300 rounded-l-md text-slate-500 text-xs font-mono-custom">
+                                                  4ev.link/
+                                                </span>
+                                                <input
+                                                  x-model="slug"
+                                                  type="text"
+                                                  id="customSlug"
+                                                  placeholder="my-custom-link"
+                                                  class="w-full p-3 bg-slate-50 border border-slate-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition text-xs sm:text-sm font-mono-custom"
+                                                >
                                             </div>
                                         </div>
                                         <div class="recaptcha-container my-4 flex justify-center"></div>
-                                        <p x-text="error" x-show="error" class="text-rose-500 text-sm h-5 -mt-2 text-center"></p>
-                                        <button type="submit" :disabled="loading" class="w-full py-3 font-semibold rounded-lg text-white bg-slate-800 hover:bg-slate-900 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <p
+                                          x-text="error"
+                                          x-show="error"
+                                          class="text-rose-500 text-xs h-5 -mt-2 text-center"
+                                        ></p>
+                                        <button
+                                          type="submit"
+                                          :disabled="loading"
+                                          class="w-full py-3 font-semibold rounded-lg text-white bg-slate-900 hover:bg-black transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
+                                        >
                                             <span x-show="!loading">Create Short Link</span>
-                                            <i x-show="loading" data-lucide="loader-2" class="animate-spin w-6 h-6"></i>
+                                            <i
+                                              x-show="loading"
+                                              data-lucide="loader-2"
+                                              class="animate-spin w-6 h-6"
+                                            ></i>
                                         </button>
-                                        <p class="text-xs text-slate-500 text-center pt-2">Links are permanent and do not expire.</p>
+                                        <p class="text-[10px] text-slate-500 text-center pt-2">
+                                          Links are permanent and do not expire.
+                                        </p>
                                     </form>
                                 </div>
                             </template>
 
                             <template x-if="editingSlug">
                                 <div x-data="editForm()" x-init="init()">
-                                    <button @click="editingSlug=null" class="text-slate-500 hover:text-slate-900 mb-4 flex items-center gap-1">
-                                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+                                    <button
+                                      @click="editingSlug=null"
+                                      class="text-slate-500 hover:text-slate-900 mb-4 flex items-center gap-1 text-xs"
+                                    >
+                                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                                        Back
                                     </button>
-                                    <h1 class="text-2xl font-bold mb-1">Edit link</h1>
-                                    <p class="text-slate-500 mb-6 font-mono" x-text="'4ev.link/' + editingSlug"></p>
+                                    <h1 class="text-2xl font-display font-semibold mb-1 tracking-tight">
+                                      Edit link
+                                    </h1>
+                                    <p
+                                      class="text-slate-500 mb-6 font-mono-custom text-xs"
+                                      x-text="'4ev.link/' + editingSlug"
+                                    ></p>
 
-                                    <form @submit.prevent="updateLink" class="space-y-4">
+                                    <form @submit.prevent="updateLink" class="space-y-4 text-sm">
                                         <div>
-                                            <label for="editUrl" class="block text-sm font-medium text-slate-700 mb-1">Destination URL</label>
-                                            <input x-model="destination_url" type="text" id="editUrl" placeholder="example.com/new-destination" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400 transition">
+                                            <label
+                                              for="editUrl"
+                                              class="block text-xs font-medium text-slate-700 mb-1 uppercase tracking-[0.14em]"
+                                            >
+                                              Destination URL
+                                            </label>
+                                            <input
+                                              x-model="destination_url"
+                                              type="text"
+                                              id="editUrl"
+                                              placeholder="example.com/new-destination"
+                                              required
+                                              class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition text-xs sm:text-sm"
+                                            >
                                         </div>
                                         <div class="flex items-center justify-between py-2">
-                                            <span class="text-sm font-medium text-slate-700">Enable Analytics</span>
+                                            <span class="text-xs font-medium text-slate-700">
+                                              Enable Analytics
+                                            </span>
                                             <button
                                                 type="button"
                                                 @click="analyticsEnabled=!analyticsEnabled;fetchAnalytics()"
-                                                :class="analyticsEnabled ? 'bg-slate-800' : 'bg-slate-200'"
+                                                :class="analyticsEnabled ? 'bg-slate-900' : 'bg-slate-200'"
                                                 class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
                                                 role="switch"
                                                 :aria-checked="analyticsEnabled"
@@ -113,13 +227,30 @@
                                             </button>
                                         </div>
                                         <div class="turnstile-container my-4 flex justify-center"></div>
-                                        <p x-text="error" x-show="error" class="text-rose-500 text-sm h-5 -mt-2 text-center"></p>
+                                        <p
+                                          x-text="error"
+                                          x-show="error"
+                                          class="text-rose-500 text-xs h-5 -mt-2 text-center"
+                                        ></p>
                                         <div class="flex gap-3">
-                                            <button type="submit" :disabled="loading" class="flex-1 py-3 font-semibold rounded-lg text-white bg-slate-800 hover:bg-slate-900 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <button
+                                              type="submit"
+                                              :disabled="loading"
+                                              class="flex-1 py-3 font-semibold rounded-lg text-white bg-slate-900 hover:bg-black transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
+                                            >
                                                 <span x-show="!loading">Update</span>
-                                                <i x-show="loading" data-lucide="loader-2" class="animate-spin w-6 h-6"></i>
+                                                <i
+                                                  x-show="loading"
+                                                  data-lucide="loader-2"
+                                                  class="animate-spin w-6 h-6"
+                                                ></i>
                                             </button>
-                                            <button type="button" @click="deleteLink" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <button
+                                              type="button"
+                                              @click="deleteLink"
+                                              :disabled="loading"
+                                              class="px-6 py-3 font-semibold rounded-lg text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
+                                            >
                                                 Delete
                                             </button>
                                         </div>
@@ -127,13 +258,21 @@
 
                                     <template x-if="analyticsEnabled && analytics.length>0">
                                         <div class="mt-8 pt-6 border-t border-slate-200">
-                                            <h3 class="text-lg font-semibold mb-4">Analytics</h3>
+                                            <h3 class="text-sm font-display font-semibold mb-4 tracking-tight">
+                                              Analytics
+                                            </h3>
                                             <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                                                <div class="space-y-3">
+                                                <div class="space-y-3 text-xs">
                                                     <template x-for="item in analytics" :key="item.referrer">
                                                         <div class="flex items-center justify-between py-2 border-b border-slate-200 last:border-0">
-                                                            <span class="text-sm font-medium text-slate-700" x-text="item.referrer"></span>
-                                                            <span class="text-sm font-semibold text-slate-900" x-text="item.count + ' clicks'"></span>
+                                                            <span
+                                                              class="font-mono-custom text-slate-700 truncate max-w-[65%]"
+                                                              x-text="item.referrer"
+                                                            ></span>
+                                                            <span
+                                                              class="font-semibold text-slate-900"
+                                                              x-text="item.count + ' clicks'"
+                                                            ></span>
                                                         </div>
                                                     </template>
                                                 </div>
@@ -143,8 +282,12 @@
 
                                     <template x-if="analyticsEnabled && analytics.length===0 && !loadingAnalytics">
                                         <div class="mt-8 pt-6 border-t border-slate-200">
-                                            <h3 class="text-lg font-semibold mb-4">Analytics</h3>
-                                            <p class="text-slate-500 text-center py-4">No analytics data yet. Share your link to start collecting data!</p>
+                                            <h3 class="text-sm font-display font-semibold mb-4 tracking-tight">
+                                              Analytics
+                                            </h3>
+                                            <p class="text-slate-500 text-center py-4 text-xs">
+                                              No analytics data yet. Share your link to start collecting data.
+                                            </p>
                                         </div>
                                     </template>
                                 </div>
@@ -153,32 +296,56 @@
                     </div>
 
                     <div class="max-w-2xl mx-auto mt-12" x-show="!editingSlug">
-                        <h2 class="text-2xl font-bold mb-4">Your Links</h2>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-h-[10rem] flex flex-col justify-center">
+                        <h2 class="text-2xl font-display font-semibold mb-4 tracking-tight">
+                          Your Links
+                        </h2>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 min-h-[10rem] flex flex-col justify-center text-sm">
                             <template x-if="loadingLinks">
                                 <div class="flex justify-center items-center p-8">
                                     <i data-lucide="loader-2" class="animate-spin w-8 h-8 text-slate-400"></i>
                                 </div>
                             </template>
                             <template x-if="!loadingLinks && errorLinks">
-                                <p class="text-rose-500 text-center" x-text="errorLinks"></p>
+                                <p
+                                  class="text-rose-500 text-center text-xs"
+                                  x-text="errorLinks"
+                                ></p>
                             </template>
                             <template x-if="!loadingLinks && !errorLinks">
                                 <div>
                                     <template x-if="links.length===0">
-                                        <p class="text-slate-500 text-center py-4">You haven't created any links yet.</p>
+                                        <p class="text-slate-500 text-center py-4 text-xs">
+                                          You haven't created any links yet.
+                                        </p>
                                     </template>
                                     <template x-if="links.length>0">
                                         <ul class="space-y-3">
                                             <template x-for="slug in links" :key="slug">
-                                                <li x-data="{ copied:!1 }" class="flex items-center justify-between p-3 bg-slate-50 rounded-md border border-slate-200 hover:bg-slate-100 transition-colors">
-                                                    <a :href="`/${slug}`" target="_blank" x-text="`${window.location.host}/${slug}`" class="font-mono text-slate-700 hover:underline"></a>
+                                                <li
+                                                  x-data="{ copied:!1 }"
+                                                  class="flex items-center justify-between p-3 bg-slate-50 rounded-md border border-slate-200 hover:bg-slate-100 transition-colors gap-3"
+                                                >
+                                                    <a
+                                                      :href="`/${slug}`"
+                                                      target="_blank"
+                                                      x-text="`${window.location.host}/${slug}`"
+                                                      class="font-mono-custom text-slate-700 hover:underline text-[11px] sm:text-xs truncate"
+                                                    ></a>
                                                     <button
                                                         @click="navigator.clipboard.writeText(`https://${window.location.host}/${slug}`);copied=!0;setTimeout(()=>copied=!1,2000)"
-                                                        class="text-slate-500 hover:text-slate-900 transition-colors"
+                                                        class="text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0"
                                                     >
-                                                        <i data-lucide="copy" class="w-4 h-4" x-show="!copied"></i>
-                                                        <i data-lucide="check" class="w-4 h-4 text-green-600" x-show="copied" style="display:none;"></i>
+                                                        <i
+                                                          data-lucide="copy"
+                                                          class="w-4 h-4"
+                                                          x-show="!copied"
+                                                        ></i>
+                                                        <i
+                                                          data-lucide="check"
+                                                          class="w-4 h-4 text-emerald-600"
+                                                          x-show="copied"
+                                                          style="display:none;"
+                                                        ></i>
                                                     </button>
                                                 </li>
                                             </template>
@@ -200,13 +367,18 @@
                 x-transition:leave="transition ease-in duration-150"
                 x-transition:leave-start="opacity-100 transform translate-x-0"
                 x-transition:leave-end="opacity-0 transform translate-x-full"
-                class="fixed right-0 top-16 bottom-0 w-80 bg-white border-l border-slate-200 shadow-lg z-20 overflow-y-auto"
+                class="fixed right-0 top-16 bottom-0 w-72 sm:w-80 bg-white border-l border-slate-200 shadow-lg z-20 overflow-y-auto text-xs"
                 style="display:none;"
             >
                 <div class="p-4">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-lg">Your Links</h3>
-                        <button @click="sidebarOpen=!1" class="text-slate-500 hover:text-slate-900">
+                        <h3 class="font-display font-semibold text-sm tracking-tight">
+                          Your Links
+                        </h3>
+                        <button
+                          @click="sidebarOpen=!1"
+                          class="text-slate-500 hover:text-slate-900"
+                        >
                             <i data-lucide="x" class="w-5 h-5"></i>
                         </button>
                     </div>
@@ -216,10 +388,15 @@
                         </div>
                     </template>
                     <template x-if="!loadingLinks && errorLinks">
-                        <p class="text-rose-500 text-sm text-center" x-text="errorLinks"></p>
+                        <p
+                          class="text-rose-500 text-[10px] text-center"
+                          x-text="errorLinks"
+                        ></p>
                     </template>
                     <template x-if="!loadingLinks && !errorLinks && links.length===0">
-                        <p class="text-slate-500 text-sm text-center py-8">No links yet</p>
+                        <p class="text-slate-500 text-[10px] text-center py-8">
+                          No links yet.
+                        </p>
                     </template>
                     <template x-if="!loadingLinks && !errorLinks && links.length>0">
                         <ul class="space-y-2">
@@ -227,7 +404,7 @@
                                 <li>
                                     <button
                                         @click="editingSlug=slug;sidebarOpen=!1"
-                                        class="w-full text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors font-mono text-sm"
+                                        class="w-full text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors font-mono-custom text-[10px]"
                                         x-text="slug"
                                     ></button>
                                 </li>
@@ -237,9 +414,12 @@
                 </div>
             </aside>
         </div>
-        <footer class="text-center py-4 text-sm text-slate-500 border-t border-slate-200 bg-slate-50">
-            <a href="https://blog.4ev.link" target="_blank" class="hover:text-slate-800 transition-colors">Blog</a> &bull;
-            <a href="/acceptable-use" class="hover:text-slate-800 transition-colors">Acceptable Use</a> &bull;
+
+        <footer class="text-center py-4 text-[10px] text-slate-500 border-t border-slate-200 bg-slate-50">
+            <a href="https://blog.4ev.link" target="_blank" class="hover:text-slate-800 transition-colors">Blog</a>
+            &bull;
+            <a href="/acceptable-use" class="hover:text-slate-800 transition-colors">Acceptable Use</a>
+            &bull;
             <a href="/abuse" class="hover:text-slate-800 transition-colors">Abuse</a>
         </footer>
     </div>
@@ -254,17 +434,20 @@
             loadingLinks:!0,
             errorLinks:"",
             async fetchLinks(){
-              this.loadingLinks=!0,this.errorLinks="";
+              this.loadingLinks=!0,
+              this.errorLinks="";
               try{
                 const e=localStorage.getItem("username"),
                       t=localStorage.getItem("pass_hash");
-                if(!e||!t)throw new Error("Authentication error.");
+                if(!e||!t)
+                  throw new Error("Authentication error.");
                 const s=await fetch("/api/links/list",{
                   method:"POST",
                   headers:{"Content-Type":"application/json"},
                   body:JSON.stringify({username:e,pass_hash:t})
                 });
-                if(!s.ok)throw new Error(await s.text()||"Failed to fetch links.");
+                if(!s.ok)
+                  throw new Error(await s.text()||"Failed to fetch links.");
                 this.links=(await s.json()).reverse()
               }catch(e){
                 this.errorLinks=e.message
@@ -285,20 +468,30 @@
             copied:!1,
             widgetId:null,
             renderCaptcha(){
-              if(!window.grecaptcha?.render)return setTimeout(()=>this.renderCaptcha(),100);
+              if(!window.grecaptcha?.render)
+                return setTimeout(()=>this.renderCaptcha(),100);
               this.$nextTick(()=>{
                 const e=this.$el.querySelector(".recaptcha-container");
-                e&&(e.innerHTML="",this.widgetId=grecaptcha.render(e,{sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"}))
+                e&&(e.innerHTML="",
+                this.widgetId=grecaptcha.render(e,{
+                  sitekey:"6LeXhdYrAAAAALW6DdgxNeHU0kwBncdicLnVYvXT"
+                }))
               })
             },
             async createLink(){
-              this.loading=!0,this.error="",this.result={};
+              this.loading=!0,
+              this.error="",
+              this.result={};
               const o=grecaptcha.getResponse(this.widgetId);
-              if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;
+              if(!o)
+                return this.error="Please complete the CAPTCHA.",
+                this.loading=!1,
+                void 0;
               try{
                 const e=localStorage.getItem("username"),
                       s=localStorage.getItem("pass_hash");
-                if(!e||!s)throw new Error("Authentication error.");
+                if(!e||!s)
+                  throw new Error("Authentication error.");
                 const t=await fetch("/api/links/create",{
                   method:"POST",
                   headers:{"Content-Type":"application/json"},
@@ -310,10 +503,14 @@
                     "g-recaptcha-response":o
                   })
                 });
-                if(!t.ok)throw new Error(await t.text()||"Failed to create link.");
+                if(!t.ok)
+                  throw new Error(await t.text()||"Failed to create link.");
                 const i=await t.json(),
                       r=window.location.host;
-                this.result={...i,url:`https://${r}/${i.slug}`},
+                this.result={
+                  ...i,
+                  url:`https://${r}/${i.slug}`
+                };
                 this.destination_url="",
                 this.slug="",
                 this.$dispatch("link-created"),
@@ -337,7 +534,9 @@
             error:"",
             widgetId:null,
             init(){
-              this.$watch("editingSlug",t=>{t&&this.loadDataForSlug(t)}),
+              this.$watch("editingSlug",t=>{
+                t&&this.loadDataForSlug(t)
+              }),
               this.editingSlug&&this.loadDataForSlug(this.editingSlug)
             },
             async loadDataForSlug(t){
@@ -348,15 +547,19 @@
               this.renderTurnstile();
               try{
                 const s=await fetch(`/api/links/get?slug=${t}`);
-                if(!s.ok)throw new Error(await s.text()||"Failed to load link");
+                if(!s.ok)
+                  throw new Error(await s.text()||"Failed to load link");
                 const i=await s.json();
-                this.destination_url=i.destination_url.startsWith("http")?i.destination_url:`https://${i.destination_url}`,
+                this.destination_url=i.destination_url.startsWith("http")
+                  ? i.destination_url
+                  : `https://${i.destination_url}`;
                 this.analyticsEnabled=i.analytics_enabled||!1;
                 if(this.analyticsEnabled){
                   this.loadingAnalytics=!0;
                   try{
                     const a=await fetch(`/api/analytics/get?slug=${t}`);
-                    if(!a.ok)throw new Error(await a.text()||"Failed to load analytics");
+                    if(!a.ok)
+                      throw new Error(await a.text()||"Failed to load analytics");
                     this.analytics=await a.json()
                   }finally{
                     this.loadingAnalytics=!1
@@ -369,20 +572,29 @@
               }
             },
             renderTurnstile(){
-              if(!window.turnstile?.render)return setTimeout(()=>this.renderTurnstile(),100);
+              if(!window.turnstile?.render)
+                return setTimeout(()=>this.renderTurnstile(),100);
               this.$nextTick(()=>{
                 const t=this.$el.querySelector(".turnstile-container");
-                t&&(t.innerHTML="",this.widgetId=turnstile.render(t,{sitekey:"0x4AAAAAAB54R0OUQDyuiUS5"}))
+                t&&(t.innerHTML="",
+                this.widgetId=turnstile.render(t,{
+                  sitekey:"0x4AAAAAAB54R0OUQDyuiUS5"
+                }))
               })
             },
             async updateLink(){
-              this.loading=!0,this.error="";
+              this.loading=!0,
+              this.error="";
               const o=turnstile.getResponse(this.widgetId);
-              if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;
+              if(!o)
+                return this.error="Please complete the CAPTCHA.",
+                this.loading=!1,
+                void 0;
               try{
                 const t=localStorage.getItem("username"),
                       s=localStorage.getItem("pass_hash");
-                if(!t||!s)throw new Error("Authentication error.");
+                if(!t||!s)
+                  throw new Error("Authentication error.");
                 const i=await fetch("/api/links/update",{
                   method:"POST",
                   headers:{"Content-Type":"application/json"},
@@ -395,7 +607,8 @@
                     "cf-turnstile-response":o
                   })
                 });
-                if(!i.ok)throw new Error(await i.text()||"Failed to update link.");
+                if(!i.ok)
+                  throw new Error(await i.text()||"Failed to update link.");
                 this.editingSlug=null,
                 this.$dispatch("link-created")
               }catch(t){
@@ -406,14 +619,20 @@
               }
             },
             async deleteLink(){
-              if(!confirm("Are you sure you want to delete this link?"))return;
-              this.loading=!0,this.error="";
+              if(!confirm("Are you sure you want to delete this link?"))
+                return;
+              this.loading=!0,
+              this.error="";
               const o=turnstile.getResponse(this.widgetId);
-              if(!o)return this.error="Please complete the CAPTCHA.",this.loading=!1,void 0;
+              if(!o)
+                return this.error="Please complete the CAPTCHA.",
+                this.loading=!1,
+                void 0;
               try{
                 const t=localStorage.getItem("username"),
                       s=localStorage.getItem("pass_hash");
-                if(!t||!s)throw new Error("Authentication error.");
+                if(!t||!s)
+                  throw new Error("Authentication error.");
                 const i=await fetch("/api/links/delete",{
                   method:"POST",
                   headers:{"Content-Type":"application/json"},
@@ -424,7 +643,8 @@
                     "cf-turnstile-response":o
                   })
                 });
-                if(!i.ok)throw new Error(await i.text()||"Failed to delete link.");
+                if(!i.ok)
+                  throw new Error(await i.text()||"Failed to delete link.");
                 this.editingSlug=null,
                 this.$dispatch("link-created")
               }catch(t){
@@ -435,11 +655,13 @@
               }
             },
             async fetchAnalytics(){
-              if(!this.analyticsEnabled||!this.editingSlug)return;
+              if(!this.analyticsEnabled||!this.editingSlug)
+                return;
               this.loadingAnalytics=!0;
               try{
                 const r=await fetch(`/api/analytics/get?slug=${this.editingSlug}`);
-                if(!r.ok)throw new Error(await r.text()||"Failed to load analytics");
+                if(!r.ok)
+                  throw new Error(await r.text()||"Failed to load analytics");
                 this.analytics=await r.json()
               }catch(e){
                 this.error=e.message
