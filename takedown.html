@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>URL Suspended - 4ev.link</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚫</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans h-screen flex flex-col items-center justify-center p-4 select-none">
+    <div class="max-w-lg w-full border-4 border-red-600/80 p-8 rounded-sm bg-slate-900 text-center shadow-[0_0_50px_rgba(220,38,38,0.4)] relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-red-600"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-red-600"></div>
+        
+        <div class="flex justify-center mb-6">
+             <i data-lucide="shield-alert" class="w-20 h-20 text-red-600"></i>
+        </div>
+
+        <h1 class="text-4xl font-black text-red-600 uppercase mb-2 tracking-[0.2em] scale-y-110">Suspended</h1>
+        
+        <div class="w-16 h-1 bg-slate-700 mx-auto mb-6"></div>
+
+        <h2 class="text-lg font-bold mb-4 text-slate-200">This destination has been seized.</h2>
+        
+        <p class="text-slate-400 text-sm leading-relaxed mb-8">
+            This 4ev.link short URL has been permanently taken down due to violations of our Terms of Service. It was reported as spam, phishing, malware, or illicit content.
+        </p>
+
+        <div class="text-xs text-slate-600 border-t border-slate-800 pt-4 uppercase tracking-widest font-mono">
+            ID: <span id="ref"></span> &bull; 4ev Security
+        </div>
+    </div>
+    <script>
+        document.getElementById('ref').innerText = Math.random().toString(36).substring(2,10).toUpperCase();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
