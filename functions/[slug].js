@@ -2,6 +2,8 @@ export async function onRequestGet({ request, params, env, next, waitUntil }) {
   if (['abuse', 'admin', 'api', 'dash', 'acceptable-use', 'takedown'].includes(params.slug)) return next();
   try {
     let dest = await env.KV_EV.get(params.slug);
+    if (dest?.startsWith('🚫')) return Response.redirect(new URL('/takedown', request.url).href, 302);
+    
     if (dest?.startsWith('✺')) {
       waitUntil((async () => {
         let ref = 'direct';
@@ -18,3 +20,4 @@ export async function onRequestGet({ request, params, env, next, waitUntil }) {
     return new Response(e.message, { status: 500 });
   }
 }
+
