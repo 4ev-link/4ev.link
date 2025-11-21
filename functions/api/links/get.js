@@ -4,14 +4,18 @@ export async function onRequestGet({ request, env }) {
         const slug = url.searchParams.get('slug');
         if (!slug) return new Response("Missing slug", { status: 400 });
 
-        const dest = await env.KV_EV.get(slug);
+        let dest = await env.KV_EV.get(slug);
         if (!dest) return new Response("Link not found", { status: 404 });
+
+        const seized = dest.startsWith('🚫');
+        if (seized) dest = dest.substring(1);
 
         const analytics_enabled = dest.startsWith('✺');
         const destination_url = analytics_enabled ? dest.substring(1) : dest;
 
-        return Response.json({ destination_url, analytics_enabled });
+        return Response.json({ destination_url, analytics_enabled, seized });
     } catch (e) {
         return new Response(e.message, { status: 500 });
     }
 }
+
