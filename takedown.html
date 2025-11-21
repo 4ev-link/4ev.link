@@ -4,39 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>URL Suspended - 4ev.link</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚫</text></svg>">
+    <title>Link Seized - 4ev.link</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👮</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #0a0a0a; }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans h-screen flex flex-col items-center justify-center p-4 select-none">
-    <div class="max-w-lg w-full border-4 border-red-600/80 p-8 rounded-sm bg-slate-900 text-center shadow-[0_0_50px_rgba(220,38,38,0.4)] relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-red-600"></div>
-        <div class="absolute bottom-0 left-0 w-full h-1 bg-red-600"></div>
+<body class="text-gray-300 font-sans flex flex-col items-center min-h-screen">
+    
+    <!-- Red Banner -->
+    <div class="w-full bg-[#8B0000] py-6 text-center border-b-8 border-[#5a0000]">
+        <h1 class="text-3xl md:text-5xl font-black text-white/90 uppercase tracking-widest drop-shadow-md font-serif">
+            This Link Has Been Taken Down
+        </h1>
+    </div>
+
+    <div class="max-w-4xl w-full p-8 flex flex-col items-center text-center">
         
-        <div class="flex justify-center mb-6">
-             <i data-lucide="shield-alert" class="w-20 h-20 text-red-600"></i>
+        <h2 class="mt-8 mb-12 text-white font-bold text-lg md:text-xl max-w-2xl">
+            The 4ev.link Abuse Prevention System has seized this destination as part of an automated action taken against suspicious URLs.
+        </h2>
+
+        <!-- Badge: Link Behind Bars -->
+        <div class="mb-12">
+            <svg width="240" height="240" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Gold Badge Shield -->
+                <circle cx="100" cy="100" r="98" fill="#1a1a1a" stroke="#C5A059" stroke-width="4"/>
+                <circle cx="100" cy="100" r="90" fill="none" stroke="#C5A059" stroke-width="1" stroke-dasharray="4 2"/>
+                <circle cx="100" cy="100" r="82" fill="none" stroke="#C5A059" stroke-width="4"/>
+                
+                <!-- Text Path -->
+                <path id="curve" d="M 35,100 A 65,65 0 0,1 165,100" fill="none"/>
+                <text width="200" font-family="serif" font-weight="bold" font-size="14" fill="#C5A059" text-anchor="middle" letter-spacing="2">
+                    <textPath href="#curve" startOffset="50%">OFFICIAL SEIZURE</textPath>
+                </text>
+
+                <path id="curve-btm" d="M 45,100 A 55,55 0 0,0 155,100" fill="none"/>
+                <text width="200" font-family="serif" font-weight="bold" font-size="10" fill="#C5A059" text-anchor="middle" letter-spacing="2">
+                    <textPath href="#curve-btm" startOffset="50%">SUSPICIOUS URL</textPath>
+                </text>
+
+                <!-- Link Icon (White) -->
+                <g transform="translate(50, 70) scale(1)">
+                     <path d="M10,30 A15,15 0 0,1 40,30 L70,30 A15,15 0 0,1 100,30 L100,40 A15,15 0 0,1 70,40 L40,40 A15,15 0 0,1 10,40 Z" fill="#e2e8f0" />
+                     <path d="M10,30 A15,15 0 0,1 40,30 L70,30 A15,15 0 0,1 100,30" stroke="none" fill="#e2e8f0"/>
+                     <!-- Interlocking link shape approximation -->
+                     <rect x="15" y="15" width="45" height="25" rx="12" fill="none" stroke="#e2e8f0" stroke-width="8" />
+                     <rect x="40" y="15" width="45" height="25" rx="12" fill="none" stroke="#e2e8f0" stroke-width="8" />
+                </g>
+
+                <!-- Bars (Grey/Steel) -->
+                <rect x="65" y="55" width="6" height="90" fill="#64748b"/>
+                <rect x="85" y="55" width="6" height="90" fill="#64748b"/>
+                <rect x="105" y="55" width="6" height="90" fill="#64748b"/>
+                <rect x="125" y="55" width="6" height="90" fill="#64748b"/>
+            </svg>
         </div>
 
-        <h1 class="text-4xl font-black text-red-600 uppercase mb-2 tracking-[0.2em] scale-y-110">Suspended</h1>
-        
-        <div class="w-16 h-1 bg-slate-700 mx-auto mb-6"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-3xl text-sm md:text-base">
+             <div class="flex flex-col items-center gap-2">
+                <span class="font-bold text-[#C5A059] uppercase tracking-widest">Status</span>
+                <span class="text-red-500 font-bold bg-red-950/30 px-3 py-1 border border-red-900/50">SUSPENDED</span>
+             </div>
+             <div class="flex flex-col items-center gap-2">
+                <span class="font-bold text-[#C5A059] uppercase tracking-widest">Reason</span>
+                <span class="text-white">Allegedly Malicious</span>
+             </div>
+             <div class="flex flex-col items-center gap-2">
+                <span class="font-bold text-[#C5A059] uppercase tracking-widest">Reference</span>
+                <span class="font-mono text-slate-500" id="ref-code"></span>
+             </div>
+        </div>
 
-        <h2 class="text-lg font-bold mb-4 text-slate-200">Destination Inaccessible</h2>
-        
-        <p class="text-slate-400 text-sm leading-relaxed mb-8">
-            This link has been taken down for <em class="text-slate-300 font-semibold not-italic">allegedly</em> violating our terms.
-            <br><br>
-            To protect our users, we reserve the right to suspend URLs that appear suspicious. Note: We do not confirm the content of every blocked destination.
+        <p class="mt-16 text-xs text-gray-500 max-w-2xl leading-loose uppercase font-medium tracking-wide">
+            Disclaimer: We cannot confirm the intent of every disabled URL.
+            This page has been flagged as suspicious. 4ev.link operates independently
+            to prevent abuse of our infrastructure. If you are the owner of this link
+            and believe this is an error, contact abuse.
         </p>
-
-        <div class="text-xs text-slate-600 border-t border-slate-800 pt-4 uppercase tracking-widest font-mono">
-            ID: <span id="ref"></span> &bull; 4ev Security
-        </div>
+        
     </div>
     <script>
-        document.getElementById('ref').innerText = Math.random().toString(36).substring(2,10).toUpperCase();
-        lucide.createIcons();
+        document.getElementById('ref-code').innerText = 
+            'CASE-' + Math.floor(Math.random()*90000+10000) + '-' + 
+            new Date().getFullYear();
     </script>
 </body>
 </html>
