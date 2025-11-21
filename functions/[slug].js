@@ -1,5 +1,5 @@
 export async function onRequestGet({ request, params, env, next, waitUntil }) {
-  if (['abuse', 'admin', 'api', 'dash', 'acceptable-use'].includes(params.slug)) return next();
+  if (['abuse', 'admin', 'api', 'dash', 'acceptable-use', 'takedown'].includes(params.slug)) return next();
   try {
     let dest = await env.KV_EV.get(params.slug);
     if (dest?.startsWith('✺')) {
