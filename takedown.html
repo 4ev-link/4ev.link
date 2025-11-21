@@ -2,93 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
     <title>Link Seized - 4ev.link</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👮</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #0a0a0a; }
-    </style>
 </head>
-<body class="text-gray-300 font-sans flex flex-col items-center min-h-screen">
+<body class="bg-[#0a0a0a] text-gray-300 font-sans h-screen w-screen overflow-hidden flex flex-col">
     
-    <!-- Red Banner -->
-    <div class="w-full bg-[#8B0000] py-6 text-center border-b-8 border-[#5a0000]">
-        <h1 class="text-3xl md:text-5xl font-black text-white/90 uppercase tracking-widest drop-shadow-md font-serif">
+    <!-- Banner -->
+    <div class="bg-[#8B0000] w-full py-4 md:py-6 text-center border-b-4 md:border-b-8 border-[#5a0000] shrink-0 shadow-lg z-10">
+        <h1 class="text-2xl md:text-5xl font-black text-white/90 uppercase tracking-widest drop-shadow-md font-serif px-2 leading-tight">
             This Link Has Been Taken Down
         </h1>
     </div>
 
-    <div class="max-w-4xl w-full p-8 flex flex-col items-center text-center">
+    <!-- Main Content (Flex to fit viewport) -->
+    <div class="flex flex-col items-center justify-evenly flex-grow p-4 w-full max-w-5xl mx-auto text-center h-full">
         
-        <h2 class="mt-8 mb-12 text-white font-bold text-lg md:text-xl max-w-2xl">
+        <h2 class="text-white font-bold text-sm md:text-xl max-w-2xl leading-snug px-4">
             The 4ev.link Abuse Prevention System has seized this destination as part of an automated action taken against suspicious URLs.
         </h2>
 
-        <!-- Badge: Link Behind Bars -->
-        <div class="mb-12">
-            <svg width="240" height="240" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <!-- Gold Badge Shield -->
-                <circle cx="100" cy="100" r="98" fill="#1a1a1a" stroke="#C5A059" stroke-width="4"/>
+        <!-- Badge: Link Behind Bars (Responsive Size) -->
+        <div class="relative shrink-0">
+            <svg class="w-40 h-40 md:w-64 md:h-64 drop-shadow-2xl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Gold Badge Base -->
+                <circle cx="100" cy="100" r="98" fill="#111" stroke="#C5A059" stroke-width="4"/>
                 <circle cx="100" cy="100" r="90" fill="none" stroke="#C5A059" stroke-width="1" stroke-dasharray="4 2"/>
-                <circle cx="100" cy="100" r="82" fill="none" stroke="#C5A059" stroke-width="4"/>
+                <circle cx="100" cy="100" r="84" fill="none" stroke="#C5A059" stroke-width="3"/>
                 
                 <!-- Text Path -->
                 <path id="curve" d="M 35,100 A 65,65 0 0,1 165,100" fill="none"/>
-                <text width="200" font-family="serif" font-weight="bold" font-size="14" fill="#C5A059" text-anchor="middle" letter-spacing="2">
+                <text font-family="serif" font-weight="bold" font-size="14" fill="#C5A059" text-anchor="middle" letter-spacing="2">
                     <textPath href="#curve" startOffset="50%">OFFICIAL SEIZURE</textPath>
                 </text>
-
                 <path id="curve-btm" d="M 45,100 A 55,55 0 0,0 155,100" fill="none"/>
-                <text width="200" font-family="serif" font-weight="bold" font-size="10" fill="#C5A059" text-anchor="middle" letter-spacing="2">
+                <text font-family="serif" font-weight="bold" font-size="10" fill="#C5A059" text-anchor="middle" letter-spacing="2">
                     <textPath href="#curve-btm" startOffset="50%">SUSPICIOUS URL</textPath>
                 </text>
 
-                <!-- Link Icon (White) -->
-                <g transform="translate(50, 70) scale(1)">
-                     <path d="M10,30 A15,15 0 0,1 40,30 L70,30 A15,15 0 0,1 100,30 L100,40 A15,15 0 0,1 70,40 L40,40 A15,15 0 0,1 10,40 Z" fill="#e2e8f0" />
-                     <path d="M10,30 A15,15 0 0,1 40,30 L70,30 A15,15 0 0,1 100,30" stroke="none" fill="#e2e8f0"/>
-                     <!-- Interlocking link shape approximation -->
-                     <rect x="15" y="15" width="45" height="25" rx="12" fill="none" stroke="#e2e8f0" stroke-width="8" />
-                     <rect x="40" y="15" width="45" height="25" rx="12" fill="none" stroke="#e2e8f0" stroke-width="8" />
+                <!-- Chain Icon -->
+                <g transform="translate(58, 75) scale(0.9)">
+                     <!-- Left link -->
+                     <rect x="0" y="10" width="45" height="25" rx="12" fill="none" stroke="#e2e8f0" stroke-width="6" />
+                     <!-- Right link -->
+                     <rect x="35" y="10" width="45" height="25" rx="12" fill="none" stroke="#e2e8f0" stroke-width="6" />
                 </g>
 
-                <!-- Bars (Grey/Steel) -->
-                <rect x="65" y="55" width="6" height="90" fill="#64748b"/>
-                <rect x="85" y="55" width="6" height="90" fill="#64748b"/>
-                <rect x="105" y="55" width="6" height="90" fill="#64748b"/>
-                <rect x="125" y="55" width="6" height="90" fill="#64748b"/>
+                <!-- Jail Bars -->
+                <clipPath id="shield-area"><circle cx="100" cy="100" r="82" /></clipPath>
+                <g clip-path="url(#shield-area)">
+                    <rect x="65" y="0" width="8" height="200" fill="#475569" opacity="0.9"/>
+                    <rect x="96" y="0" width="8" height="200" fill="#475569" opacity="0.9"/>
+                    <rect x="127" y="0" width="8" height="200" fill="#475569" opacity="0.9"/>
+                </g>
             </svg>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-3xl text-sm md:text-base">
-             <div class="flex flex-col items-center gap-2">
-                <span class="font-bold text-[#C5A059] uppercase tracking-widest">Status</span>
-                <span class="text-red-500 font-bold bg-red-950/30 px-3 py-1 border border-red-900/50">SUSPENDED</span>
+        <!-- Status Details -->
+        <div class="flex flex-row gap-8 md:gap-16 border-t border-slate-800/50 pt-4 md:pt-8">
+             <div class="flex flex-col items-center gap-1 md:gap-2">
+                <span class="font-bold text-[#C5A059] uppercase tracking-widest text-[10px] md:text-sm">Status</span>
+                <span class="text-red-500 font-black bg-red-950/40 px-2 py-0.5 md:px-4 md:py-1 border border-red-900/50 rounded text-xs md:text-base">SUSPENDED</span>
              </div>
-             <div class="flex flex-col items-center gap-2">
-                <span class="font-bold text-[#C5A059] uppercase tracking-widest">Reason</span>
-                <span class="text-white">Allegedly Malicious</span>
-             </div>
-             <div class="flex flex-col items-center gap-2">
-                <span class="font-bold text-[#C5A059] uppercase tracking-widest">Reference</span>
-                <span class="font-mono text-slate-500" id="ref-code"></span>
+             <div class="flex flex-col items-center gap-1 md:gap-2">
+                <span class="font-bold text-[#C5A059] uppercase tracking-widest text-[10px] md:text-sm">Reason</span>
+                <span class="text-slate-200 font-medium text-xs md:text-base">Allegedly Malicious</span>
              </div>
         </div>
 
-        <p class="mt-16 text-xs text-gray-500 max-w-2xl leading-loose uppercase font-medium tracking-wide">
+        <!-- Disclaimer Footer -->
+        <p class="text-[10px] md:text-xs text-gray-600 max-w-xl leading-relaxed uppercase font-medium tracking-wide pt-2">
             Disclaimer: We cannot confirm the intent of every disabled URL.
-            This page has been flagged as suspicious. 4ev.link operates independently
-            to prevent abuse of our infrastructure. If you are the owner of this link
-            and believe this is an error, contact abuse.
+            This page has been flagged as suspicious. 4ev.link operates independently.
         </p>
-        
     </div>
-    <script>
-        document.getElementById('ref-code').innerText = 
-            'CASE-' + Math.floor(Math.random()*90000+10000) + '-' + 
-            new Date().getFullYear();
-    </script>
 </body>
 </html>
