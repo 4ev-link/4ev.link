@@ -41,6 +41,11 @@ export async function onRequestPost({ request, env }) {
     if (!Array.isArray(slugs) || !slugs.includes(slug))
       return new Response("Unauthorized",{ status:403 });
 
+    // Check seizure
+    const current = await env.KV_EV.get(slug);
+    if (current?.startsWith('🚫'))
+      return new Response("Link seized. Cannot delete.", { status: 403 });
+
     const newSlugs = slugs.filter(s => s !== slug);
     await Promise.all([
       env.KV_EV.delete(slug),
@@ -61,3 +66,4 @@ export async function onRequestPost({ request, env }) {
     return new Response(e.message,{ status:500 });
   }
 }
+
