@@ -194,6 +194,16 @@
                                       x-text="'4ev.link/' + editingSlug"
                                     ></p>
 
+                                    <template x-if="seized">
+                                        <div class="bg-rose-50 border border-rose-200 text-rose-900 p-4 rounded-md mb-6 text-xs sm:text-sm flex items-start gap-3">
+                                            <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600 shrink-0"></i>
+                                            <div>
+                                                <p class="font-bold">This link has been seized.</p>
+                                                <p class="mt-1">It currently redirects to a takedown notice. Updates and deletion are disabled.</p>
+                                            </div>
+                                        </div>
+                                    </template>
+
                                     <form @submit.prevent="updateLink" class="space-y-4 text-sm">
                                         <div>
                                             <label
@@ -206,9 +216,10 @@
                                               x-model="destination_url"
                                               type="text"
                                               id="editUrl"
+                                              :disabled="seized"
                                               placeholder="example.com/new-destination"
                                               required
-                                              class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition text-xs sm:text-sm"
+                                              class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition text-xs sm:text-sm disabled:opacity-60 disabled:cursor-not-allowed"
                                             >
                                         </div>
                                         <div class="flex items-center justify-between py-2">
@@ -217,9 +228,10 @@
                                             </span>
                                             <button
                                                 type="button"
-                                                @click="analyticsEnabled=!analyticsEnabled;fetchAnalytics()"
+                                                @click="if(!seized){analyticsEnabled=!analyticsEnabled;fetchAnalytics()}"
+                                                :disabled="seized"
                                                 :class="analyticsEnabled ? 'bg-slate-900' : 'bg-slate-200'"
-                                                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+                                                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 role="switch"
                                                 :aria-checked="analyticsEnabled"
                                             >
@@ -229,7 +241,11 @@
                                                 ></span>
                                             </button>
                                         </div>
-                                        <div class="turnstile-container my-4 flex justify-center"></div>
+                                        
+                                        <template x-if="!seized">
+                                            <div class="turnstile-container my-4 flex justify-center"></div>
+                                        </template>
+
                                         <p
                                           x-text="error"
                                           x-show="error"
@@ -238,7 +254,7 @@
                                         <div class="flex gap-3">
                                             <button
                                               type="submit"
-                                              :disabled="loading"
+                                              :disabled="loading || seized"
                                               class="flex-1 py-3 font-semibold rounded-lg text-white bg-slate-900 hover:bg-black transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
                                             >
                                                 <span x-show="!loading">Update</span>
@@ -251,7 +267,7 @@
                                             <button
                                               type="button"
                                               @click="deleteLink"
-                                              :disabled="loading"
+                                              :disabled="loading || seized"
                                               class="px-6 py-3 font-semibold rounded-lg text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
                                             >
                                                 Delete
@@ -531,6 +547,7 @@
           return{
             destination_url:"",
             analyticsEnabled:!1,
+            seized:!1,
             analytics:[],
             loadingAnalytics:!1,
             loading:!1,
@@ -545,9 +562,9 @@
             async loadDataForSlug(t){
               this.destination_url="",
               this.analyticsEnabled=!1,
+              this.seized=!1,
               this.analytics=[],
-              this.error="",
-              this.renderTurnstile();
+              this.error="";
               try{
                 const s=await fetch(`/api/links/get?slug=${t}`);
                 if(!s.ok)
@@ -557,7 +574,11 @@
                   ? i.destination_url
                   : `https://${i.destination_url}`;
                 this.analyticsEnabled=i.analytics_enabled||!1;
-                if(this.analyticsEnabled){
+                this.seized=i.seized||!1;
+                
+                if(!this.seized) this.renderTurnstile();
+
+                if(this.analyticsEnabled && !this.seized){
                   this.loadingAnalytics=!0;
                   try{
                     const a=await fetch(`/api/analytics/get?slug=${t}`);
@@ -678,3 +699,4 @@
     </script>
 </body>
 </html>
+
