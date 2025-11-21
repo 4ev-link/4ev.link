@@ -40,6 +40,17 @@
                         Read Current Schema
                     </button>
                 </div>
+
+                <div class="mt-8 pt-8 border-t border-slate-700">
+                    <h2 class="text-xl font-bold mb-4 text-rose-400">Takedown</h2>
+                    <form @submit.prevent="seizeLink" class="flex gap-2 max-w-md mx-auto">
+                        <input x-model="takedownSlug" type="text" placeholder="Slug to seize" required class="flex-1 p-3 bg-slate-800 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500">
+                        <button type="submit" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50">
+                            Seize
+                        </button>
+                    </form>
+                </div>
+
                 <div class="min-h-[10rem] bg-slate-800 rounded-lg p-4 border border-slate-700 text-left">
                     <div x-show="loading" class="flex justify-center items-center h-full">
                          <i data-lucide="loader-2" class="animate-spin w-8 h-8 text-slate-400"></i>
@@ -54,8 +65,9 @@
     </div>
     
     <script>
-      function adminPage(){return{password:"",authenticated:!1,loading:!1,error:"",output:"",async runAction(t){this.loading=!0,this.error="",this.output="";try{const s=await fetch(`/api/admin/${t}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password})});if(!s.ok)throw new Error(await s.text()||`Failed to ${t}`);this.output=await s.text()}catch(s){this.error=s.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}}}}
+      function adminPage(){return{password:"",authenticated:!1,loading:!1,error:"",output:"",takedownSlug:"",async runAction(t){this.loading=!0,this.error="",this.output="";try{const s=await fetch(`/api/admin/${t}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password})});if(!s.ok)throw new Error(await s.text()||`Failed to ${t}`);this.output=await s.text()}catch(s){this.error=s.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}},async seizeLink(){this.loading=!0,this.error="",this.output="";try{const s=await fetch("/api/admin/takedown",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password,slug:this.takedownSlug})});if(!s.ok)throw new Error(await s.text()||"Failed");this.output=await s.text(),this.takedownSlug=""}catch(s){this.error=s.message}finally{this.loading=!1}}}}
       lucide.createIcons();
     </script>
 </body>
 </html>
+
