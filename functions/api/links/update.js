@@ -47,6 +47,11 @@ export async function onRequestPost({ request, env }) {
     if (!Array.isArray(slugs) || !slugs.includes(slug))
       return new Response("Unauthorized",{ status:403 });
 
+    // Check if seized
+    const current = await env.KV_EV.get(slug);
+    if (current?.startsWith('🚫'))
+      return new Response("This link has been seized and cannot be updated.", { status: 403 });
+
     let url = destination_url.startsWith("http")
       ? destination_url
       : `https://${destination_url}`;
@@ -72,3 +77,4 @@ export async function onRequestPost({ request, env }) {
     return new Response(e.message,{ status:500 });
   }
 }
+
