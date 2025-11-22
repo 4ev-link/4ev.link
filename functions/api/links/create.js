@@ -6,14 +6,15 @@ const RESERVED = new Set([
   "settings","profile","password","user","users","link","links","url","urls",
   "robots","sitemap","favicon","well-known","assets","static","img","js","css","public"
 ]);
-const ntfy = (env,title,msg,p=3) =>
+const ntfy = (env,title,msg,act,p=3) =>
   env.NTFY_TOPIC
     ? fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
         method:"POST",
         headers:{
           "Title":`🔔 ${title}`,
           "Priority":String(p),
-          "Content-Type":"text/plain"
+          "Content-Type":"text/plain",
+          ...(act?{"Actions":`view, Seize, ${act}`}:{})
         },
         body:msg
       }).catch(()=>{})
@@ -78,6 +79,7 @@ export async function onRequestPost({ request, env }) {
         env,
         "link-create",
         `event=create\nuser=${username}\nslug=${finalSlug}\ndestination=${dest_no_proto}`,
+        `${new URL(request.url).origin}/admin?slug=${finalSlug}`,
         3
       )
     ]);
