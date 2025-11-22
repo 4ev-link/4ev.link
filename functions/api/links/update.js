@@ -1,11 +1,12 @@
-const ntfy = (env,title,msg,p=2) =>
+const ntfy = (env,title,msg,act,p=2) =>
   env.NTFY_TOPIC
     ? fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
         method:"POST",
         headers:{
           "Title":`✏️ ${title}`,
           "Priority":String(p),
-          "Content-Type":"text/plain"
+          "Content-Type":"text/plain",
+          ...(act?{"Actions":`view, Seize, ${act}`}:{})
         },
         body:msg
       }).catch(()=>{})
@@ -68,6 +69,7 @@ export async function onRequestPost({ request, env }) {
         env,
         `link-${evt}`,
         `event=${evt}\nuser=${username}\nslug=${slug}\ndestination=${dest_no_proto}\nanalytics_enabled=${!!analytics_enabled}`,
+        `${new URL(request.url).origin}/admin?slug=${slug}`,
         2
       )
     ]);
@@ -77,4 +79,3 @@ export async function onRequestPost({ request, env }) {
     return new Response(e.message,{ status:500 });
   }
 }
-
