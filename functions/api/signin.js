@@ -30,11 +30,16 @@ export async function onRequestPost({ request, env }) {
       return new Response("Missing fields",{ status:400 });
 
     const user = await env.D1_EV
-      .prepare("SELECT pass_hash FROM users WHERE username = ?")
+      .prepare("SELECT pass_hash, banned_until FROM users WHERE username = ?")
       .bind(username)
       .first();
     if (user?.pass_hash !== pass_hash)
       return new Response("Invalid credentials",{ status:401 });
+
+    if (user.banned_until && user.banned_until > Date.now()) {
+      const days = Math.ceil((user.banned_until - Date.now()) / 86400000);
+      return new Response(`Account banned for ${days} more days.`, { status: 403 });
+    }
 
     await ntfy(
       env,
