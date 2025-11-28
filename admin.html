@@ -10,17 +10,17 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center font-sans">
-    <div x-data="adminPage()" class="max-w-2xl w-full p-8 text-center">
-        <h1 class="text-3xl font-bold mb-4">Admin Panel</h1>
+<body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center font-sans text-sm">
+    <div x-data="adminPage()" class="max-w-xl w-full p-6 text-center">
+        <h1 class="text-xl font-bold mb-4">Admin Panel</h1>
 
         <template x-if="!authenticated">
-            <form @submit.prevent="authenticated = !!password" class="space-y-4 max-w-sm mx-auto">
+            <form @submit.prevent="authenticated = !!password" class="space-y-3 max-w-xs mx-auto">
                 <div>
-                    <label for="adminPass" class="block text-sm font-medium text-slate-400 mb-1">Enter Admin Password</label>
-                    <input x-model="password" type="password" id="adminPass" required class="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <label for="adminPass" class="block text-xs font-medium text-slate-400 mb-1">Enter Admin Password</label>
+                    <input x-model="password" type="password" id="adminPass" required class="w-full p-2 bg-slate-800 border border-slate-700 rounded focus:outline-none focus:ring-1 focus:ring-sky-500 text-xs">
                 </div>
-                <button type="submit" class="w-full py-3 font-semibold rounded-lg text-white bg-sky-600 hover:bg-sky-700 transition-colors">
+                <button type="submit" class="w-full py-2 font-semibold rounded text-white bg-sky-600 hover:bg-sky-700 transition-colors text-xs">
                     Unlock
                 </button>
             </form>
@@ -28,44 +28,90 @@
 
         <template x-if="authenticated">
             <div class="space-y-6">
-                <p class="text-slate-400">Authenticated. Select an action.</p>
-                <div class="flex justify-center gap-4">
-                    <button @click="runAction('create-users-v1')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 transition-colors disabled:opacity-50">
-                        Create Users v1
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button @click="runAction('create-users-v1')" :disabled="loading" class="px-3 py-2 font-semibold rounded bg-indigo-600 hover:bg-indigo-700 transition-colors disabled:opacity-50 text-xs">
+                        Init Users v1
                     </button>
-                    <button @click="runAction('create-analytics-v1')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50">
-                        Create Analytics v1
+                    <button @click="runAction('migrate-users-v2')" :disabled="loading" class="px-3 py-2 font-semibold rounded bg-violet-600 hover:bg-violet-700 transition-colors disabled:opacity-50 text-xs">
+                        Migrate Users v2
                     </button>
-                    <button @click="runAction('read-schema')" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors disabled:opacity-50">
-                        Read Current Schema
+                    <button @click="runAction('create-analytics-v1')" :disabled="loading" class="px-3 py-2 font-semibold rounded bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 text-xs">
+                        Init Analytics v1
+                    </button>
+                    <button @click="runAction('read-schema')" :disabled="loading" class="px-3 py-2 font-semibold rounded bg-slate-700 hover:bg-slate-600 transition-colors disabled:opacity-50 text-xs">
+                        Read Schema
                     </button>
                 </div>
 
-                <div class="mt-8 pt-8 border-t border-slate-700">
-                    <h2 class="text-xl font-bold mb-4 text-rose-400">Takedown</h2>
-                    <form @submit.prevent="seizeLink" class="flex gap-2 max-w-md mx-auto">
-                        <input x-model="takedownSlug" type="text" placeholder="Slug to seize" required class="flex-1 p-3 bg-slate-800 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500">
-                        <button type="submit" :disabled="loading" class="px-6 py-3 font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50">
-                            Seize
-                        </button>
-                    </form>
+                <div class="grid grid-cols-2 gap-4 border-t border-slate-700 pt-6">
+                    <div>
+                        <h2 class="text-xs font-bold mb-2 text-rose-400 uppercase tracking-wider">Takedown Link</h2>
+                        <form @submit.prevent="seizeLink" class="flex flex-col gap-2">
+                            <input x-model="takedownSlug" type="text" placeholder="Slug" required class="p-2 bg-slate-800 border border-slate-700 rounded focus:outline-none focus:ring-1 focus:ring-rose-500 text-xs">
+                            <button type="submit" :disabled="loading" class="py-2 font-semibold rounded bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 text-xs">
+                                Seize
+                            </button>
+                        </form>
+                    </div>
+                    <div>
+                        <h2 class="text-xs font-bold mb-2 text-orange-400 uppercase tracking-wider">Ban User</h2>
+                        <form @submit.prevent="banUser" class="flex flex-col gap-2">
+                            <input x-model="banUsername" type="text" placeholder="Username" required class="p-2 bg-slate-800 border border-slate-700 rounded focus:outline-none focus:ring-1 focus:ring-orange-500 text-xs">
+                            <input x-model="banDays" type="number" placeholder="Days" required class="p-2 bg-slate-800 border border-slate-700 rounded focus:outline-none focus:ring-1 focus:ring-orange-500 text-xs">
+                            <button type="submit" :disabled="loading" class="py-2 font-semibold rounded bg-orange-600 hover:bg-orange-700 transition-colors disabled:opacity-50 text-xs">
+                                Ban
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
-                <div class="min-h-[10rem] bg-slate-800 rounded-lg p-4 border border-slate-700 text-left">
+                <div class="min-h-[8rem] bg-slate-800 rounded p-3 border border-slate-700 text-left text-xs font-mono">
                     <div x-show="loading" class="flex justify-center items-center h-full">
-                         <i data-lucide="loader-2" class="animate-spin w-8 h-8 text-slate-400"></i>
+                         <i data-lucide="loader-2" class="animate-spin w-6 h-6 text-slate-400"></i>
                     </div>
                     <p x-show="error" class="text-rose-400" x-text="error"></p>
-                    <pre x-show="output" class="text-slate-300 whitespace-pre-wrap" x-text="output"></pre>
-                    <p x-show="!loading && !error && !output" class="text-slate-500 text-center">Output will appear here...</p>
+                    <pre x-show="output" class="text-slate-300 whitespace-pre-wrap break-all" x-text="output"></pre>
+                    <p x-show="!loading && !error && !output" class="text-slate-500 text-center pt-8">Output...</p>
                 </div>
-                 <a href="/" class="mt-8 inline-block text-sky-500 hover:underline">&larr; Back to home</a>
+                 <a href="/" class="mt-4 inline-block text-sky-500 hover:underline text-xs">&larr; Back to home</a>
             </div>
         </template>
     </div>
     
     <script>
-      function adminPage(){return{password:"",authenticated:!1,loading:!1,error:"",output:"",takedownSlug:new URLSearchParams(window.location.search).get("slug")||"",async runAction(t){this.loading=!0,this.error="",this.output="";try{const s=await fetch(`/api/admin/${t}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password})});if(!s.ok)throw new Error(await s.text()||`Failed to ${t}`);this.output=await s.text()}catch(s){this.error=s.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}},async seizeLink(){this.loading=!0,this.error="",this.output="";try{const s=await fetch("/api/admin/takedown",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password,slug:this.takedownSlug})});if(!s.ok)throw new Error(await s.text()||"Failed");this.output=await s.text(),this.takedownSlug=""}catch(s){this.error=s.message}finally{this.loading=!1}}}}
+      function adminPage(){
+        const p = new URLSearchParams(window.location.search);
+        return {
+            password:"", authenticated:!1, loading:!1, error:"", output:"",
+            takedownSlug: p.get("slug")||"",
+            banUsername: p.get("user")||"",
+            banDays: "",
+            async runAction(t){
+                this.loading=!0,this.error="",this.output="";
+                try{
+                    const s=await fetch(`/api/admin/${t}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password})});
+                    if(!s.ok)throw new Error(await s.text()||`Failed to ${t}`);
+                    this.output=await s.text()
+                }catch(s){this.error=s.message}finally{this.loading=!1,this.$nextTick(()=>lucide.createIcons())}
+            },
+            async seizeLink(){
+                this.loading=!0,this.error="",this.output="";
+                try{
+                    const s=await fetch("/api/admin/takedown",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password,slug:this.takedownSlug})});
+                    if(!s.ok)throw new Error(await s.text()||"Failed");
+                    this.output=await s.text(),this.takedownSlug=""
+                }catch(s){this.error=s.message}finally{this.loading=!1}
+            },
+            async banUser(){
+                this.loading=!0,this.error="",this.output="";
+                try{
+                    const s=await fetch("/api/admin/ban-user",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({admin_pass:this.password,username:this.banUsername,days:this.banDays})});
+                    if(!s.ok)throw new Error(await s.text()||"Failed");
+                    this.output=await s.text(),this.banUsername="",this.banDays=""
+                }catch(s){this.error=s.message}finally{this.loading=!1}
+            }
+        }
+      }
       lucide.createIcons();
     </script>
 </body>
