@@ -1,16 +1,18 @@
-const ntfy = (env,title,msg,act,p=2) =>
-  env.NTFY_TOPIC
-    ? fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
+const ntfy = (env,title,msg,slug,user,p=2) => {
+  if(!env.NTFY_TOPIC) return Promise.resolve();
+  const origin = "https://4ev.link";
+  const actions = `view, Seize, ${origin}/admin?slug=${slug}; view, Ban User, ${origin}/admin?user=${user}`;
+  return fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
         method:"POST",
         headers:{
           "Title":`✏️ ${title}`,
           "Priority":String(p),
           "Content-Type":"text/plain",
-          ...(act?{"Actions":`view, Seize, ${act}`}:{})
+          "Actions": actions
         },
         body:msg
-      }).catch(()=>{})
-    : Promise.resolve();
+      }).catch(()=>{});
+};
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -37,11 +39,16 @@ export async function onRequestPost({ request, env }) {
       return new Response("Missing fields",{ status:400 });
 
     const user = await env.D1_EV
-      .prepare("SELECT pass_hash, custom_slugs FROM users WHERE username = ?")
+      .prepare("SELECT pass_hash, custom_slugs, banned_until FROM users WHERE username = ?")
       .bind(username)
       .first();
     if (user?.pass_hash !== pass_hash)
       return new Response("Invalid credentials",{ status:401 });
+
+    if (user.banned_until && user.banned_until > Date.now()) {
+      const days = Math.ceil((user.banned_until - Date.now()) / 86400000);
+      return new Response(`Account banned for ${days} more days.`, { status: 403 });
+    }
 
     let slugs = [];
     try { slugs = JSON.parse(user.custom_slugs) } catch {}
@@ -69,7 +76,8 @@ export async function onRequestPost({ request, env }) {
         env,
         `link-${evt}`,
         `event=${evt}\nuser=${username}\nslug=${slug}\ndestination=${dest_no_proto}\nanalytics_enabled=${!!analytics_enabled}`,
-        `${new URL(request.url).origin}/admin?slug=${slug}`,
+        slug,
+        username,
         2
       )
     ]);
