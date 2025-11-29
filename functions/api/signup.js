@@ -41,10 +41,13 @@ export async function onRequestPost({ request, env }) {
       .bind(username,pass_hash)
       .run();
 
+    const { country, region, city } = request.cf || {};
+    const loc = [city, region, country].filter(Boolean).join(", ") || "Unknown";
+
     await ntfy(
       env,
       "auth-signup",
-      `event=signup\nuser=${username}`,
+      `event=signup\nuser=${username}\nloc=${loc}`,
       3
     );
 
