@@ -13,13 +13,13 @@ const ntfy = (env,title,msg,p=3) =>
 
 export async function onRequestPost({ request, env }) {
   try {
-    const { "g-recaptcha-response":token, ...body } = await request.json();
+    const { "cf-turnstile-response":token, ...body } = await request.json();
     const vR = await fetch(
-      "https://www.google.com/recaptcha/api/siteverify",
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method:"POST",
-        headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-        body:`secret=${env.RECAPCHA_KEY}&response=${token}`
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ secret:env.TURNSTILE_KEY, response:token })
       }
     );
     if (!(await vR.json()).success)
