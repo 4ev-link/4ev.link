@@ -8,7 +8,7 @@ const RESERVED = new Set([
 ]);
 const ntfy = (env,title,msg,slug,user,p=3) => {
   if(!env.NTFY_TOPIC) return Promise.resolve();
-  const origin = "https://4ev.link"; // Hardcoded or derived from env if needed
+  const origin = "https://4ev.link";
   const actions = `view, Seize, ${origin}/admin?slug=${slug}; view, Ban User, ${origin}/admin?user=${user}`;
   return fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
     method:"POST",
@@ -24,13 +24,13 @@ const ntfy = (env,title,msg,slug,user,p=3) => {
 
 export async function onRequestPost({ request, env }) {
   try {
-    const { "g-recaptcha-response":token, ...body } = await request.json();
+    const { "cf-turnstile-response":token, ...body } = await request.json();
     const vR = await fetch(
-      "https://www.google.com/recaptcha/api/siteverify",
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method:"POST",
-        headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-        body:`secret=${env.RECAPCHA_KEY}&response=${token}`
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ secret:env.TURNSTILE_KEY, response:token })
       }
     );
     if (!(await vR.json()).success)
