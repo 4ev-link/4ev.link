@@ -11,7 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
     <link href="https://fonts.bunny.net/css?family=architects-daughter:400" rel="stylesheet" />
@@ -110,7 +110,7 @@
                           required
                           class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
                         >
-                        <div class="recaptcha-container flex justify-center"></div>
+                        <div class="turnstile-container flex justify-center"></div>
                         <p
                           x-text="error"
                           x-show="error"
@@ -151,7 +151,7 @@
                           required
                           class="w-full p-3 bg-slate-700 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                         >
-                        <div class="recaptcha-container flex justify-center"></div>
+                        <div class="turnstile-container flex justify-center"></div>
                         <p
                           x-text="error"
                           x-show="error"
@@ -203,20 +203,20 @@
           loading:!1,
           widgetId:null,
           renderCaptcha(){
-            if(!window.grecaptcha?.render)
+            if(!window.turnstile?.render)
               return void setTimeout(()=>this.renderCaptcha(),100);
             this.$nextTick(()=>{
-              const e=this.$el.querySelector(".recaptcha-container");
+              const e=this.$el.querySelector(".turnstile-container");
               e&&(e.innerHTML="",
-              this.widgetId=grecaptcha.render(e,{
-                sitekey:"6LdzaxMsAAAAAEXKHhzqVEFHvnOPIh19MFU1qrO3"
+              this.widgetId=turnstile.render(e,{
+                sitekey:"0x4AAAAAAB54R0OUQDyuiUS5"
               }))
             })
           },
           async submit(e){
             this.loading=!0,
             this.error="";
-            const c=grecaptcha.getResponse(this.widgetId);
+            const c=turnstile.getResponse(this.widgetId);
             if(!c)
               return this.error="Please complete the CAPTCHA.",
               this.loading=!1,
@@ -233,7 +233,7 @@
                       body:JSON.stringify({
                         username:this.username,
                         pass_hash:n,
-                        "g-recaptcha-response":c
+                        "cf-turnstile-response":c
                       })
                     });
               if(!i.ok)
@@ -246,7 +246,7 @@
               this.error=t.message
             }finally{
               this.loading=!1,
-              grecaptcha.reset(this.widgetId)
+              turnstile.reset(this.widgetId)
             }
           }
         }
