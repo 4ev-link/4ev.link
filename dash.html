@@ -9,7 +9,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
@@ -152,7 +151,7 @@
                                                 >
                                             </div>
                                         </div>
-                                        <div class="recaptcha-container my-4 flex justify-center"></div>
+                                        <div class="turnstile-container my-4 flex justify-center"></div>
                                         <p
                                           x-text="error"
                                           x-show="error"
@@ -487,13 +486,13 @@
             copied:!1,
             widgetId:null,
             renderCaptcha(){
-              if(!window.grecaptcha?.render)
+              if(!window.turnstile?.render)
                 return setTimeout(()=>this.renderCaptcha(),100);
               this.$nextTick(()=>{
-                const e=this.$el.querySelector(".recaptcha-container");
+                const e=this.$el.querySelector(".turnstile-container");
                 e&&(e.innerHTML="",
-                this.widgetId=grecaptcha.render(e,{
-                  sitekey:"6LdzaxMsAAAAAEXKHhzqVEFHvnOPIh19MFU1qrO3"
+                this.widgetId=turnstile.render(e,{
+                  sitekey:"0x4AAAAAAB54R0OUQDyuiUS5"
                 }))
               })
             },
@@ -501,7 +500,7 @@
               this.loading=!0,
               this.error="",
               this.result={};
-              const o=grecaptcha.getResponse(this.widgetId);
+              const o=turnstile.getResponse(this.widgetId);
               if(!o)
                 return this.error="Please complete the CAPTCHA.",
                 this.loading=!1,
@@ -519,7 +518,7 @@
                     slug:this.slug||null,
                     username:e,
                     pass_hash:s,
-                    "g-recaptcha-response":o
+                    "cf-turnstile-response":o
                   })
                 });
                 if(!t.ok)
@@ -538,7 +537,7 @@
                 this.error=e.message
               }finally{
                 this.loading=!1,
-                grecaptcha.reset(this.widgetId)
+                turnstile.reset(this.widgetId)
               }
             }
           }
