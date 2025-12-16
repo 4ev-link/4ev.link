@@ -7,10 +7,10 @@ const RESERVED = new Set([
   "robots","sitemap","favicon","well-known","assets","static","img","js","css","public"
 ]);
 const ntfy = (env,title,msg,slug,user,p=3) => {
-  if(!env.NTFY_TOPIC) return Promise.resolve();
+  if(!env.NTFY_URL) return Promise.resolve();
   const origin = "https://4ev.link";
   const actions = `view, Seize, ${origin}/admin?slug=${slug}; view, Ban User, ${origin}/admin?user=${user}`;
-  return fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
+  return fetch(env.NTFY_URL,{
     method:"POST",
     headers:{
       "Title":`🔔 ${title}`,
