@@ -1,6 +1,6 @@
 const ntfy = (env,title,msg,p=2) =>
-  env.NTFY_TOPIC
-    ? fetch(`https://ntfy.sh/${env.NTFY_TOPIC}`,{
+  env.NTFY_URL
+    ? fetch(env.NTFY_URL,{
         method:"POST",
         headers:{
           "Title":`🗑️ ${title}`,
