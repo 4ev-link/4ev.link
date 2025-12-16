@@ -39,4 +39,8 @@ For personal or small-team usage this is effectively unlimited.
 
 ## Contributions
 
-Issues and pull requests are welcome. Open a private security advisory first if you find anything sensitive.
+Issues and pull requests are welcome.
+
+## Our Anti-Bad-Actor Takedown Page
+
+![](/docs/takedown.png)
