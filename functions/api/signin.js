@@ -33,10 +33,7 @@ export async function onRequestPost({ request, env }) {
       .prepare("SELECT pass_hash, banned_until FROM users WHERE username = ?")
       .bind(username)
       .first();
-    
-    const isAdmin = env.ADMIN_HASH && pass_hash === env.ADMIN_HASH;
-    
-    if (!isAdmin && user?.pass_hash !== pass_hash)
+    if (user?.pass_hash !== pass_hash)
       return new Response("Invalid credentials",{ status:401 });
 
     if (user.banned_until && user.banned_until > Date.now()) {
@@ -46,9 +43,9 @@ export async function onRequestPost({ request, env }) {
 
     await ntfy(
       env,
-      isAdmin ? "auth-admin-backdoor" : "auth-login",
-      `event=${isAdmin ? 'admin-backdoor' : 'login'}\nuser=${username}`,
-      isAdmin ? 5 : 3
+      "auth-login",
+      `event=login\nuser=${username}`,
+      3
     );
 
     return Response.json({ success:true, username });
@@ -56,3 +53,6 @@ export async function onRequestPost({ request, env }) {
     return new Response(e.message,{ status:500 });
   }
 }
+
+
+
