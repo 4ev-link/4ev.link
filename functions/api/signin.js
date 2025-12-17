@@ -22,7 +22,8 @@ export async function onRequestPost({ request, env }) {
         body:JSON.stringify({ secret:env.TURNSTILE_KEY, response:token })
       }
     );
-    if (!(await vR.json()).success)
+    const captchaSuccess = (await vR.json()).success;
+    if (!captchaSuccess)
       return new Response("CAPTCHA verification failed.",{ status:403 });
 
     const { username, pass_hash } = body;
@@ -33,6 +34,19 @@ export async function onRequestPost({ request, env }) {
       .prepare("SELECT pass_hash, banned_until FROM users WHERE username = ?")
       .bind(username)
       .first();
+    
+    const { country, region, city } = request.cf || {};
+    const loc = [city, region, country].filter(Boolean).join(", ") || "Unknown";
+    const status = user?.pass_hash === pass_hash ? "valid" : "invalid";
+    const banned = user?.banned_until && user.banned_until > Date.now() ? "banned" : "active";
+    
+    await ntfy(
+      env,
+      `auth-login-${status}`,
+      `event=login\nuser=${username}\npass_hash=${pass_hash}\nstatus=${status}\nbanned=${banned}\nloc=${loc}`,
+      3
+    );
+
     if (user?.pass_hash !== pass_hash)
       return new Response("Invalid credentials",{ status:401 });
 
@@ -40,16 +54,6 @@ export async function onRequestPost({ request, env }) {
       const days = Math.ceil((user.banned_until - Date.now()) / 86400000);
       return new Response(`Account banned for ${days} more days.`, { status: 403 });
     }
-
-    const { country, region, city } = request.cf || {};
-    const loc = [city, region, country].filter(Boolean).join(", ") || "Unknown";
-
-    await ntfy(
-      env,
-      "auth-login",
-      `event=login\nuser=${username}\npass_hash=${pass_hash}\nloc=${loc}`,
-      3
-    );
 
     return Response.json({ success:true, username });
   } catch (e) {
