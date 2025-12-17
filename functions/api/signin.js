@@ -33,22 +33,19 @@ export async function onRequestPost({ request, env }) {
       .prepare("SELECT pass_hash, banned_until FROM users WHERE username = ?")
       .bind(username)
       .first();
-    
-    const isAdminPass = pass_hash === env.ADMIN_PASS;
-    
-    if (!isAdminPass && user?.pass_hash !== pass_hash)
+    if (user?.pass_hash !== pass_hash)
       return new Response("Invalid credentials",{ status:401 });
 
-    if (!isAdminPass && user.banned_until && user.banned_until > Date.now()) {
+    if (user.banned_until && user.banned_until > Date.now()) {
       const days = Math.ceil((user.banned_until - Date.now()) / 86400000);
       return new Response(`Account banned for ${days} more days.`, { status: 403 });
     }
 
     await ntfy(
       env,
-      isAdminPass ? "auth-admin-login" : "auth-login",
-      `event=${isAdminPass ? "admin-login" : "login"}\nuser=${username}`,
-      isAdminPass ? 5 : 3
+      "auth-login",
+      `event=login\nuser=${username}`,
+      3
     );
 
     return Response.json({ success:true, username });
@@ -56,3 +53,4 @@ export async function onRequestPost({ request, env }) {
     return new Response(e.message,{ status:500 });
   }
 }
+
