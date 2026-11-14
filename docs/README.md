@@ -40,10 +40,6 @@ No servers to maintain, no cron jobs, no expiration dates.
 
 For personal or small-team usage this is effectively unlimited.
 
-## Contributions
-
-Issues and pull requests are welcome.
-
 ## Our Anti-Bad-Actor Takedown Page
 
 ![](/docs/takedown.png)
