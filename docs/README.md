@@ -44,3 +44,10 @@ Issues and pull requests are welcome.
 ## Our Anti-Bad-Actor Takedown Page
 
 ![](/docs/takedown.png)
+
+<a href="https://starry.direct-img.link">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://starry.direct-img.link/4ev-link/4ev.link/dark.svg">
+    <img alt="4ev-link/4ev.link star history" src="https://starry.direct-img.link/4ev-link/4ev.link.svg">
+  </picture>
+</a>
