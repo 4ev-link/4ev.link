@@ -22,13 +22,13 @@ No servers to maintain, no cron jobs, no expiration dates.
 - **Cloudflare Workers** – serve requests at the edge  
 - **D1 (SQLite)** – store user hashes and slug lists  
 - **KV** – key/value lookups for lightning-fast redirects  
-- **reCAPTCHA v2** – stop bots from burning your quota
+- **Cloudflare Turnstile** – stop bots from burning your quota
 
 
 ## Security notes
 
 - Client-side scrypt stretching (N=16384, r=8, p=1, 32 B) before the request ever leaves the browser  
-- All write endpoints require a fresh reCAPTCHA token  
+- All write and auth endpoints require a fresh Turnstile token  
 - Reserved-word blacklist prevents hijacking of paths such as api, dash, admin, etc
 
 ## Limits on Cloudflare free tier
