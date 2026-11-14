@@ -1,3 +1,6 @@
+> [!CAUTION]
+> **4ev.link has been shut down.** The site was taken offline because of abuse reports of phishing sent to Cloudflare.
+
 # 4ev.link
 
 A minimalist, permanent URL shortener that runs entirely on Cloudflare's edge network.  
